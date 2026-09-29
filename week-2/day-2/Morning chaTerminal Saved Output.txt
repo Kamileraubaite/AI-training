@@ -1,0 +1,392 @@
+Last login: Tue Sep 15 09:12:17 on ttys006
+(base) kamiler@Kamiles-MacBook-Pro ~ % mkdir my-project
+(base) kamiler@Kamiles-MacBook-Pro ~ % cd my-project/
+(base) kamiler@Kamiles-MacBook-Pro my-project % ls
+(base) kamiler@Kamiles-MacBook-Pro my-project % git init
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+Initialized empty Git repository in /Users/kamiler/my-project/.git/
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status          
+On branch master
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git branch -m main
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+(base) kamiler@Kamiles-MacBook-Pro my-project % ls
+(base) kamiler@Kamiles-MacBook-Pro my-project % touch README.md
+(base) kamiler@Kamiles-MacBook-Pro my-project % ls
+README.md
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	README.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+(base) kamiler@Kamiles-MacBook-Pro my-project % touch main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % ls  
+main.py		README.md
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add .
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   README.md
+	new file:   main.py
+
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Initial commit: add blank README and main.py"
+[main (root-commit) 8d998f0] Initial commit: add blank README and main.py
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 README.md
+ create mode 100644 main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --online
+fatal: unrecognized argument: --online
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --oneline
+8d998f0 (HEAD -> main) Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log
+commit 8d998f01b86e475cf73ddbcc9a8a90f9f506b1bc (HEAD -> main)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:09:50 2026 +0100
+
+    Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git remote add origin https://github.com/Kamileraubaite/my-project.git 
+(base) kamiler@Kamiles-MacBook-Pro my-project % git remote -v
+origin	https://github.com/Kamileraubaite/my-project.git (fetch)
+origin	https://github.com/Kamileraubaite/my-project.git (push)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch main
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git push -u origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 251 bytes | 251.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kamileraubaite/my-project.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+(base) kamiler@Kamiles-MacBook-Pro my-project % git switch -c add-task-manager
+Switched to a new branch 'add-task-manager'
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git branch
+* add-task-manager
+  main
+(base) kamiler@Kamiles-MacBook-Pro my-project % ls
+main.py		README.md
+(base) kamiler@Kamiles-MacBook-Pro my-project % code .
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   main.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Created a function with to add tasks, and max tasks has a limit" -m "FuStarts task manager module. A task is a dict holding a description and done flag. add_task is a reference that grows the list."      
+[add-task-manager 6e7a349] Created a function with to add tasks, and max tasks has a limit
+ 1 file changed, 10 insertions(+)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   main.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Added complete_task" -m "Marks a task done by its list position. Return False on an out-of-range index instead of raising, so a caller can check success without a try/except."
+[add-task-manager b665056] Added complete_task
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --oneline
+b665056 (HEAD -> add-task-manager) Added complete_task
+6e7a349 Created a function with to add tasks, and max tasks has a limit
+8d998f0 (origin/main, main) Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log
+commit b6650569ed47f84fa714a610f60976b228138e42 (HEAD -> add-task-manager)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 11:42:05 2026 +0100
+
+    Added complete_task
+    
+    Marks a task done by its list position. Return False on an out-of-range index instead of raising, so a caller can check success without a try/except.
+
+commit 6e7a3493d6e9ad8d6700fb2419572c2f08b3aeb6
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:59:51 2026 +0100
+
+    Created a function with to add tasks, and max tasks has a limit
+    
+    FuStarts task manager module. A task is a dict holding a description and done flag. add_task is a reference that grows the list.
+
+commit 8d998f01b86e475cf73ddbcc9a8a90f9f506b1bc (origin/main, main)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:09:50 2026 +0100
+
+    Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --oneline
+b665056 (HEAD -> add-task-manager) Added complete_task
+6e7a349 Created a function with to add tasks, and max tasks has a limit
+8d998f0 (origin/main, main) Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   main.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   main.py
+
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Add remove task function" -m "Removes a task from the list depending on what its index is within the list"
+[add-task-manager bd35add] Add remove task function
+ 1 file changed, 7 insertions(+)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --oneline
+bd35add (HEAD -> add-task-manager) Add remove task function
+b665056 Added complete_task
+6e7a349 Created a function with to add tasks, and max tasks has a limit
+8d998f0 (origin/main, main) Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log
+commit bd35add690474fab1d67314b6b148c2daea14e29 (HEAD -> add-task-manager)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 12:00:14 2026 +0100
+
+    Add remove task function
+    
+    Removes a task from the list depending on what its index is within the list
+
+commit b6650569ed47f84fa714a610f60976b228138e42
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 11:42:05 2026 +0100
+
+    Added complete_task
+    
+    Marks a task done by its list position. Return False on an out-of-range index instead of raising, so a caller can check success without a try/except.
+
+commit 6e7a3493d6e9ad8d6700fb2419572c2f08b3aeb6
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:59:51 2026 +0100
+
+    Created a function with to add tasks, and max tasks has a limit
+    
+    FuStarts task manager module. A task is a dict holding a description and done flag. add_task is a reference that grows the list.
+
+commit 8d998f01b86e475cf73ddbcc9a8a90f9f506b1bc (origin/main, main)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:09:50 2026 +0100
+
+    Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   main.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   main.py
+
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Add lists tasks function" -m "This lists all the tasks with each of their status'"
+[add-task-manager 811a0a9] Add lists tasks function
+ 1 file changed, 7 insertions(+)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % got log --oneline
+zsh: command not found: got
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --oneline
+811a0a9 (HEAD -> add-task-manager) Add lists tasks function
+bd35add Add remove task function
+b665056 Added complete_task
+6e7a349 Created a function with to add tasks, and max tasks has a limit
+8d998f0 (origin/main, main) Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log
+commit 811a0a98626c1fbc41b92ef839266004c381a730 (HEAD -> add-task-manager)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 12:05:11 2026 +0100
+
+    Add lists tasks function
+    
+    This lists all the tasks with each of their status'
+
+commit bd35add690474fab1d67314b6b148c2daea14e29
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 12:00:14 2026 +0100
+
+    Add remove task function
+    
+    Removes a task from the list depending on what its index is within the list
+
+commit b6650569ed47f84fa714a610f60976b228138e42
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 11:42:05 2026 +0100
+
+    Added complete_task
+    
+    Marks a task done by its list position. Return False on an out-of-range index instead of raising, so a caller can check success without a try/except.
+
+commit 6e7a3493d6e9ad8d6700fb2419572c2f08b3aeb6
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:59:51 2026 +0100
+
+    Created a function with to add tasks, and max tasks has a limit
+    
+    FuStarts task manager module. A task is a dict holding a description and done flag. add_task is a reference that grows the list.
+
+commit 8d998f01b86e475cf73ddbcc9a8a90f9f506b1bc (origin/main, main)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:09:50 2026 +0100
+
+    Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % python main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % python3 main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % python main.py
+1. Buy milk - Not Done
+2. Study Python - Not Done
+1. Buy milk - Done
+2. Study Python - Not Done
+1. Buy milk - Done
+(base) kamiler@Kamiles-MacBook-Pro my-project % python3 main.py
+Current tasks:
+1. Do Git walkthrough - Done
+2. Review the pull request - Not Done
+3. Merge to main - Not Done
+(base) kamiler@Kamiles-MacBook-Pro my-project % git add .
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   main.py
+
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Add main() to demo the module end tp 
+dquote> 
+dquote> 
+(base) kamiler@Kamiles-MacBook-Pro my-project % git commit -m "Add main() to demo the module end to end" -m "wires all function together into something runnable. So the module can be shown."
+[add-task-manager 633d64a] Add main() to demo the module end to end
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+(base) kamiler@Kamiles-MacBook-Pro my-project % git status
+On branch add-task-manager
+nothing to commit, working tree clean
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log --oneline
+633d64a (HEAD -> add-task-manager) Add main() to demo the module end to end
+811a0a9 Add lists tasks function
+bd35add Add remove task function
+b665056 Added complete_task
+6e7a349 Created a function with to add tasks, and max tasks has a limit
+8d998f0 (origin/main, main) Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git log
+commit 633d64a101736580370196dc171de51de5658e11 (HEAD -> add-task-manager)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 12:19:53 2026 +0100
+
+    Add main() to demo the module end to end
+    
+    wires all function together into something runnable. So the module can be shown.
+
+commit 811a0a98626c1fbc41b92ef839266004c381a730
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 12:05:11 2026 +0100
+
+    Add lists tasks function
+    
+    This lists all the tasks with each of their status'
+
+commit bd35add690474fab1d67314b6b148c2daea14e29
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 12:00:14 2026 +0100
+
+    Add remove task function
+    
+    Removes a task from the list depending on what its index is within the list
+
+commit b6650569ed47f84fa714a610f60976b228138e42
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 11:42:05 2026 +0100
+
+    Added complete_task
+    
+    Marks a task done by its list position. Return False on an out-of-range index instead of raising, so a caller can check success without a try/except.
+
+commit 6e7a3493d6e9ad8d6700fb2419572c2f08b3aeb6
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:59:51 2026 +0100
+
+    Created a function with to add tasks, and max tasks has a limit
+    
+    FuStarts task manager module. A task is a dict holding a description and done flag. add_task is a reference that grows the list.
+
+commit 8d998f01b86e475cf73ddbcc9a8a90f9f506b1bc (origin/main, main)
+Author: Kamileraubaite <kamileraub@gmail.com>
+Date:   Tue Sep 15 10:09:50 2026 +0100
+
+    Initial commit: add blank README and main.py
+(base) kamiler@Kamiles-MacBook-Pro my-project % git push -u origin add-task-manager
+Enumerating objects: 17, done.
+Counting objects: 100% (17/17), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (15/15), done.
+Writing objects: 100% (15/15), 2.13 KiB | 2.13 MiB/s, done.
+Total 15 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (4/4), done.
+remote: 
+remote: Create a pull request for 'add-task-manager' on GitHub by visiting:
+remote:      https://github.com/Kamileraubaite/my-project/pull/new/add-task-manager
+remote: 
+To https://github.com/Kamileraubaite/my-project.git
+ * [new branch]      add-task-manager -> add-task-manager
+branch 'add-task-manager' set up to track 'origin/add-task-manager'.
+(base) kamiler@Kamiles-MacBook-Pro my-project % 

@@ -1,0 +1,217 @@
+Last login: Wed Sep 16 10:35:20 on ttys009
+(base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/heaLth
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/health
+{"status":"ok"}%                                                                (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms 
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms 
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms 
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms 
+]{"detail":"Not Found"}%                                                        (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms 
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265},{"id":5,"name":"Lindqvist Partners","jurisdiction":"APAC","revenue_usd_m":410,"lawyers":520,"equity_partners":68}]%     (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/{firm_id}/benchmarks
+{"detail":[{"type":"int_parsing","loc":["path","firm_id"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"firm_id"}]}%   (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/1/benchmarks
+{"id":1,"name":"Harding & Voss","revenue_per_lawyer_usd":670270,"revenue_per_equity_partner":2066667}%                                                          (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/1      
+{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210}%                                                 (base) kamiler@Kamiles-MacBook-Pro ~ % curl -X POST http://127.0.0.1:8000/firms \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Ferreira Adeyemi", "jurisdiction": "EU", "revenue_usd_m": 755.5, "lawyers": 880, "equity_partners": 102}'
+6%                                                                              (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms 
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265},{"id":5,"name":"Lindqvist Partners","jurisdiction":"APAC","revenue_usd_m":410,"lawyers":520,"equity_partners":68}]%     (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/1
+{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210}%                                                 (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/2
+{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340}%                                                 (base) kamiler@Kamiles-MacBook-Pro ~ % curl -X POST http://127.0.0.1:8000/firms \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Ferreira Adeyemi", "jurisdiction": "EU", "revenue_usd_m": 755.5, "lawyers": 880, "equity_partners": 102}'
+{"id":6,"name":"Ferreira Adeyemi","jurisdiction":"EU","revenue_usd_m":755.5,"lawyers":880,"equity_partners":102}%                                               (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/999/benchmarks
+{"detail":"No firm with id 999 found"}%                                         (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/abc/benchmarks
+{"detail":[{"type":"int_parsing","loc":["path","firm_id"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"abc"}]}%       (base) kamiler@Kamiles-MacBook-Pro ~ % curl http://127.0.0.1:8000/firms/abc    
+{"detail":[{"type":"int_parsing","loc":["path","firm_id"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"abc"}]}%       (base) kamiler@Kamiles-MacBook-Pro ~ % curl -X POST http://127.0.0.1:8000/firms \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Ferreira Adeyemi", "jurisdiction": "EU", "revenue_usd_m": 755.5, "lawyers": 880'                         
+{"detail":[{"type":"json_invalid","loc":["body",89],"msg":"JSON decode error","input":{},"ctx":{"error":"Expecting ',' delimiter"}}]}%                          (base) kamiler@Kamiles-MacBook-Pro ~ % curl -X POST http://127.0.0.1:8000/firms \
+  -H "Content-Type: application/json" \
+  -d '{"name": "", "jurisdiction": "EU", "revenue_usd_m": 755.5, "lawyers": 880, "equity_partners": 102}' 
+{"detail":[{"type":"string_too_short","loc":["body","name"],"msg":"String should have at least 1 character","input":"","ctx":{"min_length":1}}]}%               (base) kamiler@Kamiles-MacBook-Pro ~ % curl "http://127.0.0.1:8000/firms?min_lawyers=500"
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265},{"id":5,"name":"Lindqvist Partners","jurisdiction":"APAC","revenue_usd_m":410,"lawyers":520,"equity_partners":68}]%     (base) kamiler@Kamiles-MacBook-Pro ~ % curl "http://127.0.0.1:8000/firms?min_lawyers=600"
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265},{"id":5,"name":"Lindqvist Partners","jurisdiction":"APAC","revenue_usd_m":410,"lawyers":520,"equity_partners":68}]%     (base) kamiler@Kamiles-MacBook-Pro ~ % curl "http://127.0.0.1:8000/firms?min_lawyers=600"
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265}]%                                       (base) kamiler@Kamiles-MacBook-Pro ~ % curl "http://127.0.0.1:8000/firms?min_lawyers=1800"
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340}]%                (base) kamiler@Kamiles-MacBook-Pro ~ % curl "http://127.0.0.1:8000/firms?min_revenue=1800"
+[{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265}]%                 (base) kamiler@Kamiles-MacBook-Pro ~ % curl "http://127.0.0.1:8000/firms?min_revenue=2000"
+[{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340}]%                                               (base) kamiler@Kamiles-MacBook-Pro ~ % cd /Users/kamiler/Desktop/SPARTA\ GLOBAL/Centellic\ /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api /Users/kamiler/Desktop/SPARTA\ GLOBAL/Centellic\ /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api
+cd: string not in pwd: /Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api
+(base) kamiler@Kamiles-MacBook-Pro ~ % ls
+anaconda_projects	firm-intelligence-api	print(hello world).py
+Applications		iCloud Drive (Archive)	Public
+Autodesk		index.html		PyCharmMiscProject
+cd			lesson			PycharmProjects
+ChaosCosmos		Library			script_html.js
+confusion matrix.png	library-api-centellic	script.js
+Console.js		Movies			styles.css
+Creative Cloud Files	Music			Untitled.ipynb
+Desktop			My Python Stuff		Untitled1.ipynb
+dir			my-project		variables
+Documents		mysql.sql		variables.js
+Downloads		Parallels		variables2.js
+Enscape			Pictures
+(base) kamiler@Kamiles-MacBook-Pro ~ % cd /Users/kamiler/Desktop/SPARTA\ GLOBAL/Centellic\ /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % ls
+__pycache__		main.py
+data.py			requirements.txt
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % mkdir routers
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % ls
+__pycache__		main.py			routers
+data.py			requirements.txt
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % touch routers/__init__.py
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % touch routers/firms.py
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % pwd
+/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % ls -la
+total 40
+drwxr-xr-x   4 kamiler  staff   128 16 Sep 15:51 __pycache__
+drwxr-xr-x  10 kamiler  staff   320 16 Sep 15:48 .
+drwxrwxrwx@  9 kamiler  staff   288 16 Sep 10:43 ..
+-rw-r--r--@  1 kamiler  staff  6148 16 Sep 15:49 .DS_Store
+drwxr-xr-x@  5 kamiler  staff   160 15 Sep 15:01 .mypy_cache
+drwxr-xr-x   8 kamiler  staff   256 16 Sep 10:28 .venv
+-rw-r--r--@  1 kamiler  staff   669 15 Sep 15:14 data.py
+-rw-r--r--@  1 kamiler  staff  4044 16 Sep 15:51 main.py
+-rw-rw-rw-@  1 kamiler  staff   102 14 Sep 13:47 requirements.txt
+drwxr-xr-x   4 kamiler  staff   128 16 Sep 15:50 routers
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms/2/benchmarks
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms/2/benchmarks
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms/2/benchmarks
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms/2/benchmarks
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms/2/benchmarks
+{"id":2,"name":"Marchetti Ruiz","revenue_per_lawyer_usd":1241667,"revenue_per_equity_partner":3067647}%                                                         (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms/3          
+{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115}%                                                     (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/firms            
+[{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1240,"lawyers":1850,"equity_partners":210},{"id":2,"name":"Marchetti Ruiz","jurisdiction":"US","revenue_usd_m":2980,"lawyers":2400,"equity_partners":340},{"id":3,"name":"Okonkwo Bell","jurisdiction":"UK","revenue_usd_m":640,"lawyers":910,"equity_partners":115},{"id":4,"name":"Sandoval Kerr","jurisdiction":"US","revenue_usd_m":1875,"lawyers":1620,"equity_partners":265},{"id":5,"name":"Lindqvist Partners","jurisdiction":"APAC","revenue_usd_m":410,"lawyers":520,"equity_partners":68}]%     (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/    
+{"detail":"Not Found"}%                                                         (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -i -X POST http://127.0.0.1:8000/people -H "Content-Type: application/json" \
+  -d '{"name":"Nadia Farouk","role":"Associate","firm_id":3}'
+HTTP/1.1 201 Created
+date: Thu, 17 Sep 2026 10:12:56 GMT
+server: uvicorn
+content-length: 61
+content-type: application/json
+
+{"id":5,"name":"Nadia Farouk","role":"Associate","firm_id":3}%                  (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -i -X PUT http://127.0.0.1:8000/firms/1 -H "Content-Type: application/json" \
+  -d '{"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1300,"lawyers":1900,"equity_partners":215}'
+HTTP/1.1 200 OK
+date: Thu, 17 Sep 2026 10:13:50 GMT
+server: uvicorn
+content-length: 112
+content-type: application/json
+
+{"id":1,"name":"Harding & Voss","jurisdiction":"UK","revenue_usd_m":1300.0,"lawyers":1900,"equity_partners":215}%                                               (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/reports
+[{"id":1,"title":"UK Market Outlook","firm_id":1,"revisions":["v1"]},{"id":2,"title":"US Partner Compensation","firm_id":2,"revisions":["v1"]}]%                (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/reports/1
+{"id":1,"title":"UK Market Outlook","firm_id":1,"revisions":["v1"],"views":1}%  (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/reports/1
+{"id":1,"title":"UK Market Outlook","firm_id":1,"revisions":["v1"],"views":2}%  (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/reports/1
+{"id":1,"title":"UK Market Outlook","firm_id":1,"revisions":["v1"],"views":3}%  (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl http://127.0.0.1:8000/reports/1
+{"id":1,"title":"UK Market Outlook","firm_id":1,"revisions":["v1"],"views":4}%  (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -w "\nTime: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export
+Internal Server Error
+Time: 3.018771s
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s -w "Request 1: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+curl -s -w "Request 2: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+wait
+[1] 91160
+[2] 91161
+Internal Server ErrorRequest 2: 3.020307s
+[2]  + done       curl -s -w "Request 2: %{time_total}s\n" 
+Internal Server ErrorRequest 1: 6.028779s
+[1]  + done       curl -s -w "Request 1: %{time_total}s\n" 
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s -w "Request 1: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+curl -s -w "Request 2: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+wait
+[1] 91220
+[2] 91221
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 1: 0.002594s
+[1]  - done       curl -s -w "Request 1: %{time_total}s\n" 
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 2: 0.002852s
+[2]  + done       curl -s -w "Request 2: %{time_total}s\n" 
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % time curl http://127.0.0.1:8000/reports/1/export & time curl http://127.0.0.1:8000/reports/2/export & wait
+[1] 92306
+[2] 92307
+{"id":2,"title":"US Partner Compensation","format":"pdf"}curl http://127.0.0.1:8000/reports/2/export  0.02s user 0.02s system 1% cpu 3.079 total
+[2]  + done       time curl http://127.0.0.1:8000/reports/2/export
+{"id":1,"title":"UK Market Outlook","format":"pdf"}curl http://127.0.0.1:8000/reports/1/export  0.02s user 0.02s system 0% cpu 6.085 total
+[1]  + done       time curl http://127.0.0.1:8000/reports/1/export
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % time curl http://127.0.0.1:8000/reports/1/export & time curl http://127.0.0.1:8000/reports/2/export & wait
+[1] 92509
+[2] 92510
+{"id":1,"title":"UK Market Outlook","format":"pdf"}curl http://127.0.0.1:8000/reports/1/export  0.02s user 0.02s system 1% cpu 3.250 total
+[1]  - done       time curl http://127.0.0.1:8000/reports/1/export
+{"id":2,"title":"US Partner Compensation","format":"pdf"}curl http://127.0.0.1:8000/reports/2/export  0.02s user 0.03s system 0% cpu 6.253 total
+[2]  + done       time curl http://127.0.0.1:8000/reports/2/export
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % time curl http://127.0.0.1:8000/reports/1/export & time curl http://127.0.0.1:8000/reports/2/export & wait
+[1] 92564
+[2] 92565
+{"id":1,"title":"UK Market Outlook","format":"pdf"}curl http://127.0.0.1:8000/reports/1/export  0.02s user 0.01s system 65% cpu 0.048 total
+{"id":2,"title":"US Partner Compensation","format":"pdf"}[1]  - done       time curl http://127.0.0.1:8000/reports/1/export
+curl http://127.0.0.1:8000/reports/2/export  0.02s user 0.01s system 64% cpu 0.049 total
+[2]  + done       time curl http://127.0.0.1:8000/reports/2/export
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s http://127.0.0.1:8000/reports/1/export >/tmp/report-export.json &
+sleep 0.2
+curl -s -o /dev/null -w 'health_time=%{time_total}s status=%{http_code}\n' \
+  http://127.0.0.1:8000/health
+[1] 93345
+[1]  + done       curl -s http://127.0.0.1:8000/reports/1/export > /tmp/report-export.json
+health_time=0.000022s status=000
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s http://127.0.0.1:8000/reports/1/export >/tmp/report-export.json &
+sleep 0.2
+curl -s -o /dev/null -w 'health_time=%{time_total}s status=%{http_code}\n' \
+  http://127.0.0.1:8000/health
+[1] 93383
+health_time=0.000022s status=000
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % 
+[1]  + done       curl -s http://127.0.0.1:8000/reports/1/export > /tmp/report-export.json
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s http://127.0.0.1:8000/reports/1/export >/tmp/report-export.json &
+sleep 0.2
+curl -s -o /dev/null -w 'health_time=%{time_total}s status=%{http_code}\n' \
+  http://127.0.0.1:8000/health
+[1] 93448
+health_time=0.000024s status=000
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % 
+[1]  + done       curl -s http://127.0.0.1:8000/reports/1/export > /tmp/report-export.json
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s http://127.0.0.1:8000/reports/1/export >/tmp/report-export.json &
+sleep 0.2
+curl -s -o /dev/null -w 'health_time=%{time_total}s status=%{http_code}\n' \
+  http://127.0.0.1:8000/health
+[1] 93488
+[1]  + done       curl -s http://127.0.0.1:8000/reports/1/export > /tmp/report-export.json
+health_time=0.000029s status=000
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s -w "Request 1: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+curl -s -w "Request 2: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+wait
+
+[1] 93708
+[2] 93709
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 2: 4.038283s
+[2]  + done       curl -s -w "Request 2: %{time_total}s\n" 
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 1: 7.041076s
+[1]  + done       curl -s -w "Request 1: %{time_total}s\n" 
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s -w "Request 1: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+curl -s -w "Request 2: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+wait
+
+[1] 93789
+[2] 93790
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 2: 0.003030s
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 1: 0.003773s
+[2]  + done       curl -s -w "Request 2: %{time_total}s\n" 
+[1]  + done       curl -s -w "Request 1: %{time_total}s\n" 
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s -w "Request 1: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+curl -s -w "Request 2: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+wait
+
+[1] 94129
+[2] 94130
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 1: 3.008601s
+[1]  - done       curl -s -w "Request 1: %{time_total}s\n" 
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 2: 6.009655s
+[2]  + done       curl -s -w "Request 2: %{time_total}s\n" 
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % curl -s -w "Request 1: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+curl -s -w "Request 2: %{time_total}s\n" http://127.0.0.1:8000/reports/1/export &
+wait
+
+[1] 94189
+[2] 94190
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 2: 3.004222s
+{"id":1,"title":"UK Market Outlook","format":"pdf"}Request 1: 3.004776s
+[2]  + done       curl -s -w "Request 2: %{time_total}s\n" 
+[1]  + done       curl -s -w "Request 1: %{time_total}s\n" 
+(base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % 

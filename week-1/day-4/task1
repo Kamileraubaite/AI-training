@@ -1,0 +1,21 @@
+## Spec for creating  "escalate_ticket" function
+
+WHY  - When a ticket misses its reponse target,it should be escalated
+
+WHAT - This function checks if a ticket misses its response target of 5 days. The ticket priority must be escalated from "Normal" to "Urgent"
+
+CONTEXT -
+Files: tickets.py
+Pattern: one line docstring
+Settled:ticket stays in ticket record
+
+CONSTRAINTS - Out of Scope: Not emailing customer , Avoid new dependencies
+
+TASKS  -
+1. Check if last_customer_reply_at >= 5 days ,mark ticket as "Urgent"
+ Touches: tickets.py
+ Verify: Ignore if current ticket priority is  already "Urgent". Ignore if current ticket status is "closed"
+
+2. Apply escalation to ticket
+Touches: tickets.py
+Verify: Check if ticket marked "Urgent" after escalation  and mark change as "system" not person (edited)

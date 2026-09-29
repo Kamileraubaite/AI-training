@@ -1,0 +1,741 @@
+Last login: Wed Sep 16 10:37:38 on ttys016
+(base) kamiler@Kamiles-MacBook-Pro ~ % pip install --break-system-packages fastapi==0.115.6 httpx==0.28.1
+Requirement already satisfied: fastapi==0.115.6 in /opt/anaconda3/lib/python3.12/site-packages (0.115.6)
+Requirement already satisfied: httpx==0.28.1 in /opt/anaconda3/lib/python3.12/site-packages (0.28.1)
+Requirement already satisfied: starlette<0.42.0,>=0.40.0 in /opt/anaconda3/lib/python3.12/site-packages (from fastapi==0.115.6) (0.41.3)
+Requirement already satisfied: pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4 in /opt/anaconda3/lib/python3.12/site-packages (from fastapi==0.115.6) (2.9.2)
+Requirement already satisfied: typing-extensions>=4.8.0 in /opt/anaconda3/lib/python3.12/site-packages (from fastapi==0.115.6) (4.16.0)
+Requirement already satisfied: anyio in /opt/anaconda3/lib/python3.12/site-packages (from httpx==0.28.1) (4.2.0)
+Requirement already satisfied: certifi in /opt/anaconda3/lib/python3.12/site-packages (from httpx==0.28.1) (2025.1.31)
+Requirement already satisfied: httpcore==1.* in /opt/anaconda3/lib/python3.12/site-packages (from httpx==0.28.1) (1.0.2)
+Requirement already satisfied: idna in /opt/anaconda3/lib/python3.12/site-packages (from httpx==0.28.1) (3.7)
+Requirement already satisfied: h11<0.15,>=0.13 in /opt/anaconda3/lib/python3.12/site-packages (from httpcore==1.*->httpx==0.28.1) (0.14.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /opt/anaconda3/lib/python3.12/site-packages (from pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4->fastapi==0.115.6) (0.6.0)
+Requirement already satisfied: pydantic-core==2.23.4 in /opt/anaconda3/lib/python3.12/site-packages (from pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4->fastapi==0.115.6) (2.23.4)
+Requirement already satisfied: sniffio>=1.1 in /opt/anaconda3/lib/python3.12/site-packages (from anyio->httpx==0.28.1) (1.3.0)
+(base) kamiler@Kamiles-MacBook-Pro ~ % cd /Users/kamiler/Desktop/SPARTA\ GLOBAL/Centellic\ /centellic-fde/week-2/day-2/package/starter
+(base) kamiler@Kamiles-MacBook-Pro starter % 
+uv venv .venv --python 3.12
+Using CPython 3.12.7 interpreter at: /opt/anaconda3/bin/python3
+Creating virtual environment at: .venv
+? A virtual environment already exists at `.venv`. Do you want to replace it? [y✔ A virtual environment already exists at `.venv`. Do you want to replace it? · yes
+
+Activate with: source .venv/bin/activate
+(base) kamiler@Kamiles-MacBook-Pro starter % 
+(base) kamiler@Kamiles-MacBook-Pro starter % source .venv/bin/activate
+(.venv) (base) kamiler@Kamiles-MacBook-Pro starter % uv pip install --python .venv/bin/python -r requirements.txt
+Resolved 25 packages in 725ms
+Installed 25 packages in 155ms
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + ast-serialize==0.11.2
+ + certifi==2026.7.22
+ + click==8.5.0
+ + fastapi==0.115.6
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + idna==3.19
+ + iniconfig==2.3.0
+ + librt==0.15.0
+ + mypy==2.3.1
+ + mypy-extensions==1.1.0
+ + packaging==26.3
+ + pathspec==1.1.1
+ + pluggy==1.6.0
+ + pydantic==2.9.2
+ + pydantic-core==2.23.4
+ + pygments==2.21.0
+ + pytest==9.1.1
+ + ruff==0.16.6
+ + starlette==0.41.3
+ + typing-extensions==4.16.0
+ + uvicorn==0.34.0
+(.venv) (base) kamiler@Kamiles-MacBook-Pro starter % uv pip list --python .venv/bin/python
+Package           Version
+----------------- ---------
+annotated-types   0.8.0
+anyio             4.15.1
+ast-serialize     0.11.2
+certifi           2026.7.22
+click             8.5.0
+fastapi           0.115.6
+h11               0.16.0
+httpcore          1.0.9
+httpx             0.28.1
+idna              3.19
+iniconfig         2.3.0
+librt             0.15.0
+mypy              2.3.1
+mypy-extensions   1.1.0
+packaging         26.3
+pathspec          1.1.1
+pluggy            1.6.0
+pydantic          2.9.2
+pydantic-core     2.23.4
+pygments          2.21.0
+pytest            9.1.1
+ruff              0.16.6
+starlette         0.41.3
+typing-extensions 4.16.0
+uvicorn           0.34.0
+(.venv) (base) kamiler@Kamiles-MacBook-Pro starter % PYTHONPATH=src .venv/bin/python -m uvicorn api:app --reload
+INFO:     Will watch for changes in these directories: ['/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [36207] using StatReload
+INFO:     Started server process [36215]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36215]
+INFO:     Started server process [36257]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36257]
+INFO:     Started server process [36271]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36271]
+INFO:     Started server process [36429]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36429]
+INFO:     Started server process [36436]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36436]
+INFO:     Started server process [36494]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36494]
+INFO:     Started server process [37158]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37158]
+INFO:     Started server process [37411]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37411]
+INFO:     Started server process [37976]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37976]
+INFO:     Started server process [38631]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [38631]
+INFO:     Started server process [40777]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [40777]
+INFO:     Started server process [41363]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41363]
+INFO:     Started server process [41409]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41409]
+INFO:     Started server process [41670]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41670]
+INFO:     Started server process [42106]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42106]
+INFO:     Started server process [42536]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42536]
+INFO:     Started server process [44084]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44084]
+INFO:     Started server process [44212]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/data.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44212]
+INFO:     Started server process [47678]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47678]
+INFO:     Started server process [47687]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/data.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47687]
+INFO:     Started server process [47825]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47825]
+INFO:     Started server process [47833]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47833]
+INFO:     Started server process [47841]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47841]
+INFO:     Started server process [47851]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51588 - "GET /firms/2/benchmarks HTTP/1.1" 404 Not Found
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47851]
+INFO:     Started server process [48616]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51602 - "GET /firms/2/benchmarks HTTP/1.1" 404 Not Found
+WARNING:  StatReload detected changes in 'firm-intelligence-api/routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [48616]
+INFO:     Started server process [48839]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51611 - "GET /firms/2/benchmarks HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51613 - "GET /firms/2/benchmarks HTTP/1.1" 404 Not Found
+^CINFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [48839]
+INFO:     Stopping reloader process [36207]
+(.venv) (base) kamiler@Kamiles-MacBook-Pro starter % python -m uvicorn main:app --reload
+INFO:     Will watch for changes in these directories: ['/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [49290] using StatReload
+ERROR:    Error loading ASGI app. Could not import module "main".
+^CINFO:     Stopping reloader process [49290]
+(.venv) (base) kamiler@Kamiles-MacBook-Pro starter % cd firm-intelligence-api
+(.venv) (base) kamiler@Kamiles-MacBook-Pro firm-intelligence-api % python -m uvicorn main:app --reload
+INFO:     Will watch for changes in these directories: ['/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [49449] using StatReload
+INFO:     Started server process [49453]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51622 - "GET /firms/2/benchmarks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51626 - "GET /firms/3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51627 - "GET /firms HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [49453]
+INFO:     Started server process [50073]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'data.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50073]
+INFO:     Started server process [50193]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51680 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51681 - "POST /people HTTP/1.1" 201 Created
+INFO:     127.0.0.1:51683 - "PUT /firms/1 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50193]
+INFO:     Started server process [62222]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [62222]
+INFO:     Started server process [62267]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:51865 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51865 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51870 - "GET /reports HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [62267]
+INFO:     Started server process [71487]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71487]
+INFO:     Started server process [77201]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [77201]
+INFO:     Started server process [87928]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52289 - "GET /reports/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52290 - "GET /reports/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52291 - "GET /reports/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52292 - "GET /reports/1 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [87928]
+INFO:     Started server process [89284]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52338 - "GET /reports/1/export HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api/routers/reports.py", line 78, in export_report
+    await time.sleep(3)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:     127.0.0.1:52339 - "GET /reports/1/export HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api/routers/reports.py", line 78, in export_report
+    await time.sleep(3)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:     127.0.0.1:52351 - "GET /reports/1/export HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api/routers/reports.py", line 78, in export_report
+    await time.sleep(3)
+TypeError: object NoneType can't be used in 'await' expression
+INFO:     127.0.0.1:52350 - "GET /reports/1/export HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kamiler/Desktop/SPARTA GLOBAL/Centellic /centellic-fde/week-2/day-2/package/starter/firm-intelligence-api/routers/reports.py", line 78, in export_report
+    await time.sleep(3)
+TypeError: object NoneType can't be used in 'await' expression
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [89284]
+INFO:     Started server process [91213]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52354 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52355 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [91213]
+INFO:     Started server process [92293]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52379 - "GET /reports/2/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52378 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52382 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52383 - "GET /reports/2/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [92293]
+INFO:     Started server process [92557]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52385 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52386 - "GET /reports/2/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52392 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [92557]
+INFO:     Started server process [93366]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52397 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52399 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [93366]
+INFO:     Started server process [93479]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52401 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [93479]
+INFO:     Started server process [93701]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52405 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52406 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [93701]
+INFO:     Started server process [93780]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52408 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52409 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [93780]
+INFO:     Started server process [94076]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52416 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52417 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [94076]
+INFO:     Started server process [94180]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52421 - "GET /reports/1/export HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52420 - "GET /reports/1/export HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [94180]
+INFO:     Started server process [1733]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1733]
+INFO:     Started server process [1894]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1894]
+INFO:     Started server process [4044]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4044]
+INFO:     Started server process [4072]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/people.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4072]
+INFO:     Started server process [4083]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4083]
+INFO:     Started server process [4208]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4208]
+INFO:     Started server process [36964]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/reports.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36964]
+INFO:     Started server process [37243]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'routers/firms.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37243]
+INFO:     Started server process [39604]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+

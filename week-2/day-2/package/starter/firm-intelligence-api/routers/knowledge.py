@@ -1,0 +1,92 @@
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+from anthropic import APIStatusError, APITimeoutError, RateLimitError
+import knowledge_store as knowledge
+import llm
+
+# Our relevance floor
+# below this we treat the retrieved context as not actually relevant
+RELEVANCE_FLOOR = 0.35
+
+# create your router
+router = APIRouter(prefix="/knowledge", tags=["knowledge"])
+
+# create your class (QUESTION) using base model
+# w. 2 field (question and top_k)
+
+class Question(BaseModel):
+    question: str = Field(min_length=1)
+    top_k: int = Field(default=3, ge=0, le=8)
+
+@router.post("/index")
+def rebuild_index():
+    tokens = knowledge.build_index()
+    return {"indexed": knowledge.count(), "embeddings": tokens}
+
+
+# One is post because it acts
+# The other post gets the data
+
+@router.post("/search")
+def search(q: Question):
+    """Retrieval only... no model or generated text etc... only what was found"""
+    try: 
+        return{"question": q.question, "results": knowledge.search(q.question, q.top_k)}
+    except RuntimeError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+
+# fucntion behaviour   
+# The refusal happens before the model is called, not after
+# why 200 and not 404 for refusal???
+# the request was valid but service handled it correctly and "we have no relevant document" is a real answer
+# sources...    
+#   this makes our answer checkable... wothout it a client has an answer/para that they HAVE to trust.... with it they can open doc-004 and verify the claim themselves
+# same error mapping as before
+        # 504, 429, 502.... never a bare 500
+
+@router.post("/ask")
+def ask(q: Question):
+    """Retrieve, then answer using only what was retreived... or refuse"""
+    # 1. Retreive
+    # same call as /knowledge/search
+    try:
+        hits = knowledge.search(q.question, q.top_k)
+    except RuntimeError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+
+    # 2. Filter, and decide whether to make a call to the model at all
+    # (compare against our RELEVANCE_FLOOR)
+    usable = [hit for hit in hits if hit["score"] >= RELEVANCE_FLOOR]
+
+    if not usable:
+        return {
+            "question": q.question,
+            "answer": None,
+            "refused": True,
+            "reason": "NO document in the corpus is relevant to that question.",
+            "sources": []
+        }
+
+    # 3. Build context, generate the answer
+    context = "\n\n".join(f"[{h['id']}] {h['title']}\n{h['text']}" for h in usable)
+
+    try:
+        result = llm.answer_from_context(q.question, context)
+    except APITimeoutError:
+        raise HTTPException(status_code=504, detail="Answer provider timed out")
+    except RateLimitError:
+        raise HTTPException(status_code=429, detail="Answer provider rate limited")
+    except APIStatusError:
+        raise HTTPException(status_code=502, detail="Answer provider unavailable")
+    
+
+
+    # 4. Return the successful answer
+    return {"question": q.question,
+            "answer": result["answer"],
+            "refused": False,
+            "sources": [{"id": h["id"], "title": h["title"], "score": round(h["score"], 3)} for h in usable],
+            "input_tokens": result["input_tokens"],
+            "output_tokens": result["output_tokens"]
+    }
+    
