@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Header, HTTPException
 from models import CustomerCreate
 
-from data import CUSTOMERS
+from data import CUSTOMERS, COMPLAINTS
 
 # Group customer endpoints under /customers.
 router = APIRouter(prefix="/customers", tags=["customers"])
@@ -12,10 +12,7 @@ _seen_keys: dict[str, dict] = {}
 # Return all customer records.
 # Return customers, optionally filtered by segment and vulnerability flag.
 @router.get("")
-def list_customers(
-segment: str | None = None,
-    vulnerability_flag: bool | None = None,
-) -> list[dict[str, str | bool | None]]:
+def list_customers(segment: str | None = None, vulnerability_flag: bool | None = None,) -> list[dict[str, str | bool | None]]:
     results = CUSTOMERS
 
     # Apply this filter only when a segment is provided.
@@ -78,3 +75,15 @@ def update_customer(
 ) -> dict:
     customer.update(new.model_dump())
     return customer
+
+# Delete a customer unless complaints refer to them.
+@router.delete("/{customer_id}", status_code=204)
+def delete_customer(customer: dict = Depends(get_customer_or_404),) -> None:
+    for complaint in COMPLAINTS:
+        if complaint["customer_id"] == customer["id"]:
+            raise HTTPException(
+                status_code=409,
+                detail="Customer has linked complaints and cannot be deleted",
+            )
+    CUSTOMERS.remove(customer)
+    return
