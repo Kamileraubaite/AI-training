@@ -34,7 +34,7 @@ segment: str | None = None,
 
     return results
 
-# Reusable lookup.
+# Reusable lookupgit push.
 def get_customer_or_404(customer_id: str) -> dict:
     for customer in CUSTOMERS:
         if customer["id"] == customer_id:
@@ -68,4 +68,13 @@ def add_customer(new: CustomerCreate, idempotency_key: str | None = Header(defau
     CUSTOMERS.append(customer)
     if idempotency_key is not None:
         _seen_keys[idempotency_key] = customer
+    return customer
+
+# Replace a customer's editable fields.
+@router.put("/{customer_id}")
+def update_customer(
+    new: CustomerCreate,
+    customer: dict = Depends(get_customer_or_404),
+) -> dict:
+    customer.update(new.model_dump())
     return customer
