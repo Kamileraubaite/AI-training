@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
 from models import CustomerCreate
 
 from data import CUSTOMERS
@@ -34,14 +34,21 @@ segment: str | None = None,
 
     return results
 
-@router.get("/{customer_id}")
-def get_customer(customer_id: str) -> dict[str, str | bool | None]:
+# Reusable lookup.
+def get_customer_or_404(customer_id: str) -> dict:
     for customer in CUSTOMERS:
         if customer["id"] == customer_id:
             return customer
 
-    # Return 404 if the customer does not exist.
     raise HTTPException(status_code=404, detail="Customer not found")
+
+
+# FastAPI runs the lookup before this endpoint.
+@router.get("/{customer_id}")
+def get_customer(
+    customer: dict = Depends(get_customer_or_404),
+) -> dict:
+    return customer
 
 # Post
 # /customers
