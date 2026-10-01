@@ -1,16 +1,19 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Header, HTTPException
+from models import CustomerCreate
 
 from data import CUSTOMERS
 
 # Group customer endpoints under /customers.
 router = APIRouter(prefix="/customers", tags=["customers"])
 
+_seen_keys: dict[str, dict] = {}
+
 
 # Return all customer records.
 # Return customers, optionally filtered by segment and vulnerability flag.
 @router.get("")
 def list_customers(
-    segment: str | None = None,
+segment: str | None = None,
     vulnerability_flag: bool | None = None,
 ) -> list[dict[str, str | bool | None]]:
     results = CUSTOMERS
@@ -39,3 +42,23 @@ def get_customer(customer_id: str) -> dict[str, str | bool | None]:
 
     # Return 404 if the customer does not exist.
     raise HTTPException(status_code=404, detail="Customer not found")
+
+# Post
+# /customers
+@router.post("", status_code=201)
+def add_customer(new: CustomerCreate, idempotency_key: str | None = Header(default=None),) -> dict:
+    if idempotency_key is not None:
+        if idempotency_key in _seen_keys:
+            return _seen_keys[idempotency_key]
+    new_id = max((int(customer["id"].split("-")[1]) for customer in CUSTOMERS),default=0,) + 1
+    customer = {
+        "id": f"CUST-{new_id:03d}",
+        "name": new.name,
+        "segment": new.segment,
+        "vulnerability_flag": new.vulnerability_flag,
+        "support_needs": new.support_needs,
+    }
+    CUSTOMERS.append(customer)
+    if idempotency_key is not None:
+        _seen_keys[idempotency_key] = customer
+    return customer
