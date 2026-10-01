@@ -84,7 +84,7 @@ PRODUCTS = [
 COMPLAINTS = [
     {
         "id": "CMP-001",
-        "customer_id": "CUS-001",
+        "customer_id": "CUST-001",
         "product_id": "PRD-001",
         "description": (
             "The customer disputes a mortgage late-payment fee. "
@@ -102,7 +102,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-002",
-        "customer_id": "CUS-002",
+        "customer_id": "CUST-002",
         "product_id": "PRD-001",
         "description": (
             "The customer disputed a mortgage late-payment fee. "
@@ -123,7 +123,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-003",
-        "customer_id": "CUS-003",
+        "customer_id": "CUST-003",
         "product_id": "PRD-002",
         "description": (
             "The customer disputed a mortgage late-payment fee. "
@@ -145,7 +145,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-004",
-        "customer_id": "CUS-004",
+        "customer_id": "CUST-004",
         "product_id": "PRD-004",
         "description": (
             "The customer reports two annual card fees on the same "
@@ -163,7 +163,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-005",
-        "customer_id": "CUS-005",
+        "customer_id": "CUST-005",
         "product_id": "PRD-004",
         "description": (
             "The customer reported a duplicate annual card fee. "
@@ -184,7 +184,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-006",
-        "customer_id": "CUS-002",
+        "customer_id": "CUST-002",
         "product_id": "PRD-005",
         "description": (
             "The customer disputed a card fee and said that staff had "
@@ -205,7 +205,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-007",
-        "customer_id": "CUS-003",
+        "customer_id": "CUST-003",
         "product_id": "PRD-003",
         "description": (
             "The customer says a mortgage payment has not appeared "
@@ -223,7 +223,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-008",
-        "customer_id": "CUS-004",
+        "customer_id": "CUST-004",
         "product_id": "PRD-003",
         "description": (
             "The customer reported a missing mortgage payment. "
@@ -244,7 +244,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-009",
-        "customer_id": "CUS-005",
+        "customer_id": "CUST-005",
         "product_id": "PRD-005",
         "description": (
             "The customer says they were promised a written explanation "
@@ -262,7 +262,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-010",
-        "customer_id": "CUS-002",
+        "customer_id": "CUST-002",
         "product_id": "PRD-005",
         "description": (
             "The customer complained that the bank had not sent "
@@ -283,7 +283,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-011",
-        "customer_id": "CUS-001",
+        "customer_id": "CUST-001",
         "product_id": "PRD-001",
         "description": (
             "The customer reports receiving a standard-print mortgage "
@@ -301,7 +301,7 @@ COMPLAINTS = [
     },
     {
         "id": "CMP-012",
-        "customer_id": "CUS-004",
+        "customer_id": "CUST-004",
         "product_id": "PRD-004",
         "description": (
             "The customer says something on their latest card statement "
