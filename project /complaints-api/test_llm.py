@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
-
+import anthropic
+import httpx
 import llm
 from main import app
 
@@ -16,13 +17,16 @@ FAKE_SUMMARY = {
 
 # Check that the summary endpoint returns text and token usage.
 def test_summary_returns_text_and_usage(monkeypatch):
-    monkeypatch.setattr(
-        llm,
-        "summarise_complaint",
-        lambda complaint: FAKE_SUMMARY,
-    )
-
+    monkeypatch.setattr(llm,"summarise_complaint",lambda complaint: FAKE_SUMMARY,)
     response = client.post("/insights/CMP-001/summary")
-
     assert response.status_code == 200
     assert response.json() == FAKE_SUMMARY
+
+# Check that a Claude timeout becomes a clear 504 response.
+def test_provider_timeout_becomes_504(monkeypatch):
+    def boom(complaint):
+        raise anthropic.APITimeoutError(request=None)
+    monkeypatch.setattr(llm, "summarise_complaint", boom)
+    response = client.post("/insights/CMP-001/summary")
+    assert response.status_code == 504
+    assert response.json()["detail"] == "Claude request timed out"
