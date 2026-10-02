@@ -14,10 +14,29 @@ def get_complaint_or_404(complaint_id: str) -> dict:
     raise HTTPException(status_code=404, detail="Complaint not found")
 
 
-# Return all complaint records.
+# Return complaints, optionally filtered by status and theme.
 @router.get("")
-def list_complaints() -> list[dict]:
-    return COMPLAINTS
+def list_complaints(
+    status: str | None = None,
+    theme: str | None = None,
+) -> list[dict]:
+    results = COMPLAINTS
+
+    # Keep complaints with the requested status.
+    if status is not None:
+        results = [
+            complaint for complaint in results
+            if complaint["status"] == status
+        ]
+
+    # Keep complaints with the requested theme.
+    if theme is not None:
+        results = [
+            complaint for complaint in results
+            if complaint["theme"] == theme
+        ]
+
+    return results
 
 
 # Return the complaint identified in the URL.
