@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Header, HTTPException
 
-from data import PRODUCTS
+from data import PRODUCTS, COMPLAINTS
 from documents import DOCUMENTS
 from models import ProductCreate
 
@@ -94,3 +94,19 @@ def update_product(new: ProductCreate,
     # Update the existing record while keeping its ID.
     product.update(new.model_dump())
     return product
+
+# Delete a product unless complaints refer to it.
+@router.delete("/{product_id}", status_code=204)
+def delete_product(
+    product: dict = Depends(get_product_or_404),
+) -> None:
+    # Preserve products that are linked to complaint records.
+    for complaint in COMPLAINTS:
+        if complaint["product_id"] == product["id"]:
+            raise HTTPException(
+                status_code=409,
+                detail="Product has linked complaints and cannot be deleted",
+            )
+
+    PRODUCTS.remove(product)
+    return
