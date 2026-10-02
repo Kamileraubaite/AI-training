@@ -49,7 +49,8 @@ def get_terms_document_or_404(document_id: str) -> dict:
 
 # Create a new banking product.
 @router.post("", status_code=201)
-def add_product(new: ProductCreate, idempotency_key: str | None = Header(default=None),
+def add_product(new: ProductCreate, 
+                idempotency_key: str | None = Header(default=None),
                 ) -> dict:
     # Return the previous result if this request key has already been used.
     if idempotency_key is not None:
@@ -80,4 +81,16 @@ def add_product(new: ProductCreate, idempotency_key: str | None = Header(default
     if idempotency_key is not None:
         _seen_keys[idempotency_key] = product
 
+    return product
+
+# Replacing a product's editable fields.
+@router.put("/{product_id}")
+def update_product(new: ProductCreate,
+    product: dict = Depends(get_product_or_404),
+) -> dict:
+    # Validate the linked terms document before changing the product.
+    get_terms_document_or_404(new.terms_document_id)
+
+    # Update the existing record while keeping its ID.
+    product.update(new.model_dump())
     return product
