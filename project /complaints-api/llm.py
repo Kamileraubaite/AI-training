@@ -2,6 +2,8 @@ import os
 
 import anthropic
 
+MODEL = "claude-haiku-4-5-20251001"
+
 # Create the Claude client for complaint summaries and analysis.
 client = anthropic.Anthropic(
     api_key=os.environ["ANTHROPIC_API_KEY"],
@@ -24,7 +26,7 @@ SYSTEM_PROMPT = (
 def build_prompt(complaint: dict) -> str:
     return (
         "Summarise this complaint in two short paragraphs."
-        "Cover the customer's allegations, current status and assessment."
+        "Cover the customer's allegations, current status, recorded theme and severity."
         "If the complaint is resolved, include the outcome and resolution summary."
         "If any information is missing, say so."
         f"Complaint ID: {complaint['id']}\n"
@@ -40,3 +42,20 @@ def build_prompt(complaint: dict) -> str:
         f"Resolution summary: {complaint['resolution_summary']}\n"
         f"Outcome: {complaint['outcome']}\n"
     )
+
+# Generate a complaint summary and return its token usage.
+def summarise_complaint(complaint: dict) -> dict:
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=400,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": build_prompt(complaint)}],
+    )
+
+    return {
+        "id": complaint["id"],
+        "summary": response.content[0].text,
+        "input_tokens": response.usage.input_tokens,
+        "output_tokens": response.usage.output_tokens,
+        "stop_reason": response.stop_reason,
+    }
