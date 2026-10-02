@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Header, HTTPException
-from models import ComplaintCreate
+from models import ComplaintCreate, ComplaintUpdate
 from routers.customers import get_customer_or_404
 from routers.products import get_product_or_404
 
@@ -88,4 +88,50 @@ def add_complaint(new: ComplaintCreate,
     # Store the result to prevent duplicate creation on retries.
     if idempotency_key is not None:
         _seen_keys[idempotency_key] = complaint
+    return complaint
+
+# Update a complaint's assessment and resolution details.
+@router.put("/{complaint_id}")
+def update_complaint(new: ComplaintUpdate,
+    complaint: dict = Depends(get_complaint_or_404),
+) -> dict:
+    # Accept only the complaint statuses used by this project.
+    if new.status not in ["open", "under_review", "resolved"]:
+        raise HTTPException(status_code=422, detail="Invalid complaint status")
+
+    if new.status == "resolved":
+        # A resolved complaint must include its findings and outcome.
+        if (
+            new.resolved_date is None
+            or not new.resolution_summary
+            or not new.resolution_summary.strip()
+            or not new.outcome
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail="Resolved complaints require a date, summary and outcome",
+            )
+
+        if new.outcome not in ["upheld", "partially_upheld", "not_upheld"]:
+            raise HTTPException(status_code=422, detail="Invalid complaint outcome")
+
+        # Resolution cannot happen before the complaint was received.
+        if new.resolved_date.isoformat() < complaint["received_date"]:
+            raise HTTPException(
+                status_code=422,
+                detail="Resolution date cannot precede the received date",
+            )
+
+    elif (
+        new.resolved_date is not None
+        or new.resolution_summary is not None
+        or new.outcome is not None
+    ):
+        raise HTTPException(
+            status_code=422,
+            detail="Unresolved complaints cannot have resolution details",
+        )
+    # Convert the date to text to match the existing complaint records.
+    changes = new.model_dump(mode="json")
+    complaint.update(changes)
     return complaint

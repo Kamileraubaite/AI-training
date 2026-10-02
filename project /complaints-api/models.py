@@ -29,3 +29,12 @@ class ComplaintCreate(BaseModel):
     # Leave classification pending until the complaint is assessed.
     theme: str = "unclassified"
     severity: str = "unassessed"
+
+# Fields staff provide when assessing or resolving a complaint.
+class ComplaintUpdate(BaseModel):
+    theme: str = Field(min_length=1)
+    severity: str = Field(min_length=1)
+    status: str = Field(min_length=1)
+    resolved_date: date | None = None
+    resolution_summary: str | None = Field(default=None, min_length=1)
+    outcome: str | None = Field(default=None, min_length=1)
