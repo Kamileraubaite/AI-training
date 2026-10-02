@@ -64,3 +64,9 @@ def test_analysis_returns_structured_data(monkeypatch):
     response = client.post("/insights/CMP-001/analyse")
     assert response.status_code == 200
     assert response.json()["analysis"] == analysis.model_dump()
+
+# Return 404 when analysis is requested for a missing complaint.
+def test_analysis_missing_complaint_returns_404():
+    response = client.post("/insights/CMP-999/analyse")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Complaint not found"
