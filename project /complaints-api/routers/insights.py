@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from anthropic import APIConnectionError, APIStatusError, APITimeoutError, RateLimitError
+from fastapi.responses import StreamingResponse
 
 import llm
 from routers.complaints import get_complaint_or_404
@@ -21,3 +22,12 @@ def summarise(
     except (APIConnectionError, APIStatusError):
         raise HTTPException(status_code=502, detail="Claude service unavailable")
     
+# Stream a draft complaint summary as its text becomes available.
+@router.get("/{complaint_id}/summary/stream")
+def stream_summary(
+    complaint: dict = Depends(get_complaint_or_404),
+):
+    return StreamingResponse(
+        llm.stream_complaint_summary(complaint),
+        media_type="text/plain",
+    )
