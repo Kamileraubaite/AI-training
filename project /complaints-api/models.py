@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from datetime import date
 
 # Fields required when creating a customer.
 class CustomerCreate(BaseModel):
@@ -16,3 +17,15 @@ class ProductCreate(BaseModel):
     name: str = Field(min_length=1)
     product_type: str = Field(min_length=1)
     terms_document_id: str = Field(min_length=1)
+
+# Fields required to record a new complaint.
+class ComplaintCreate(BaseModel):
+    customer_id: str = Field(min_length=1)
+    product_id: str = Field(min_length=1)
+    description: str = Field(min_length=1)
+    channel: str = Field(min_length=1)
+    received_date: date
+
+    # Leave classification pending until the complaint is assessed.
+    theme: str = "unclassified"
+    severity: str = "unassessed"
