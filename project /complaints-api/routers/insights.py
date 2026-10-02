@@ -50,3 +50,16 @@ def stream_summary(
         media_type="text/plain",
     )
 
+# Generate structured complaint analysis for staff review.
+@router.post("/{complaint_id}/analyse")
+def analyse(
+    complaint: dict = Depends(get_complaint_or_404),
+) -> dict:
+    try:
+        return llm.analyse_complaint(complaint)
+    except APITimeoutError:
+        raise HTTPException(status_code=504, detail="Claude request timed out")
+    except RateLimitError:
+        raise HTTPException(status_code=429, detail="Claude rate limit reached")
+    except (APIConnectionError, APIStatusError):
+        raise HTTPException(status_code=502, detail="Claude service unavailable")
