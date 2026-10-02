@@ -30,3 +30,10 @@ def test_provider_timeout_becomes_504(monkeypatch):
     response = client.post("/insights/CMP-001/summary")
     assert response.status_code == 504
     assert response.json()["detail"] == "Claude request timed out"
+
+# Check that the estimate endpoint returns the input token count.
+def test_estimate_returns_input_tokens(monkeypatch):
+    monkeypatch.setattr(llm,"estimate_input_tokens",lambda complaint: 137,)
+    response = client.get("/insights/CMP-001/summary/estimate")
+    assert response.status_code == 200
+    assert response.json()["estimated_input_tokens"] == 137
