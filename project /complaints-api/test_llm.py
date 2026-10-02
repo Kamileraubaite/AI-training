@@ -7,12 +7,9 @@ from main import app
 client = TestClient(app)
 
 FAKE_SUMMARY = {
-    "id": "CMP-001",
-    "summary": "The customer disputes a mortgage late-payment fee.",
-    "input_tokens": 120,
-    "output_tokens": 95,
-    "stop_reason": "end_turn",
-}
+    "id": "CMP-001","summary": "The customer disputes a mortgage late-payment fee.",
+    "input_tokens": 120,"output_tokens": 95,"stop_reason": "end_turn",
+    }
 
 
 # Check that the summary endpoint returns text and token usage.
@@ -37,3 +34,11 @@ def test_estimate_returns_input_tokens(monkeypatch):
     response = client.get("/insights/CMP-001/summary/estimate")
     assert response.status_code == 200
     assert response.json()["estimated_input_tokens"] == 137
+
+# Check that the streaming endpoint returns all the summary text.
+def test_stream_yields_chunks(monkeypatch):
+    monkeypatch.setattr(llm,"stream_complaint_summary",lambda complaint: iter(["Complaint ", "summary"]),)
+    with client.stream("GET", "/insights/CMP-001/summary/stream") as response:
+        assert response.status_code == 200
+        body = "".join(response.iter_text())
+    assert body == "Complaint summary"
