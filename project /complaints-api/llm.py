@@ -1,6 +1,7 @@
 import os
-
 import anthropic
+
+from pydantic import BaseModel, Field
 
 MODEL = "claude-haiku-4-5-20251001"
 
@@ -80,3 +81,44 @@ def stream_complaint_summary(complaint: dict):
     ) as stream:
         for text in stream.text_stream:
             yield text
+
+
+# Define the fields required in Claude's draft complaint analysis.
+class ComplaintAnalysis(BaseModel):
+    issue_summary: str = Field(
+        description="Briefly describe the reported issue without treating allegations as facts"
+    )
+    recorded_theme: str = Field(
+        description="Copy the theme from the complaint record"
+    )
+    recorded_severity: str = Field(
+        description="Copy the severity from the complaint record"
+    )
+    missing_information: list[str] = Field(
+        max_length=5,
+        description="Information needed to understand or investigate the complaint"
+    )
+    suggested_next_steps: list[str] = Field(
+        max_length=5,
+        description="Practical investigation steps for staff review, without deciding the outcome"
+    )
+
+# Generate structured complaint analysis for staff review.
+def analyse_complaint(complaint: dict) -> dict:
+    response = client.messages.parse(
+        model=MODEL,
+        max_tokens=800,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": build_prompt(complaint)}],
+        output_format=ComplaintAnalysis,
+    )
+
+    analysis = response.content[0].parsed_output
+
+    return {
+        "id": complaint["id"],
+        "analysis": analysis,
+        "input_tokens": response.usage.input_tokens,
+        "output_tokens": response.usage.output_tokens,
+        "stop_reason": response.stop_reason,
+    }
