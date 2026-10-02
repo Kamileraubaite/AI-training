@@ -1,6 +1,5 @@
 from fastapi.testclient import TestClient
 import anthropic
-import httpx
 import llm
 from main import app
 
@@ -42,3 +41,26 @@ def test_stream_yields_chunks(monkeypatch):
         assert response.status_code == 200
         body = "".join(response.iter_text())
     assert body == "Complaint summary"
+
+# Check that the endpoint returns structured complaint analysis.
+def test_analysis_returns_structured_data(monkeypatch):
+    analysis = llm.ComplaintAnalysis(
+        issue_summary="The customer disputes a late-payment fee.",
+        recorded_theme="late_payment_fee",
+        recorded_severity="medium",
+        missing_information=["Payment receipt date"],
+        suggested_next_steps=["Check the payment records"],
+    )
+
+    fake_response = {
+        "id": "CMP-001",
+        "analysis": analysis,
+        "input_tokens": 120,
+        "output_tokens": 95,
+        "stop_reason": "end_turn",
+    }
+
+    monkeypatch.setattr(llm, "analyse_complaint", lambda complaint: fake_response)
+    response = client.post("/insights/CMP-001/analyse")
+    assert response.status_code == 200
+    assert response.json()["analysis"] == analysis.model_dump()
