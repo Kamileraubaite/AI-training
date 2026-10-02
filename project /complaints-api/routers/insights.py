@@ -20,3 +20,4 @@ def summarise(
         raise HTTPException(status_code=429, detail="Claude rate limit reached")
     except (APIConnectionError, APIStatusError):
         raise HTTPException(status_code=502, detail="Claude service unavailable")
+    
