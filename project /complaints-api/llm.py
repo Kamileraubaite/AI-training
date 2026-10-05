@@ -1,9 +1,11 @@
 import os
+from enum import Enum
+
 import anthropic
 
 from pydantic import BaseModel, Field
 
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = os.environ.get("CLAUDE_MODEL", "claude-haiku-4-5-20251001")
 
 # Create the Claude client for complaint summaries and analysis.
 client = anthropic.Anthropic(
@@ -26,10 +28,28 @@ SYSTEM_PROMPT = (
 
 def build_prompt(complaint: dict) -> str:
     return (
-        "Summarise this complaint in two short paragraphs."
-        "Cover the customer's allegations, current status, recorded theme and severity."
-        "If the complaint is resolved, include the outcome and resolution summary."
-        "If any information is missing, say so."
+        "Summarise this complaint in two short paragraphs. "
+        "Cover the customer's allegations, current status, recorded theme and severity. "
+        "If the complaint is resolved, include the outcome and resolution summary. "
+        "If any information is missing, say so.\n\n"
+        + complaint_data(complaint)
+    )
+
+# Ask for a proposed classification of the complaint, not a summary.
+def build_analysis_prompt(complaint: dict) -> str:
+    return (
+        "Propose a theme, a severity and a recommended next step for this complaint. "
+        "Base them only on the complaint facts below and explain why in the rationale. "
+        "The recorded theme and severity are the current confirmed values, "
+        "which your proposal does not overwrite. "
+        "The next step must be an investigation or handling action, not an outcome. "
+        "List any facts that need checking.\n\n"
+        + complaint_data(complaint)
+    )
+
+# Format the complaint record as data for the user message.
+def complaint_data(complaint: dict) -> str:
+    return (
         f"Complaint ID: {complaint['id']}\n"
         f"Customer ID: {complaint['customer_id']}\n"
         f"Product ID: {complaint['product_id']}\n"
@@ -73,24 +93,38 @@ def stream_complaint_summary(complaint: dict):
             yield text
 
 
-# Define the fields required in Claude's draft complaint analysis.
+# The themes and severities Claude may propose.
+class Theme(str, Enum):
+    late_payment_fee = "late_payment_fee"
+    incorrect_charge = "incorrect_charge"
+    payment_processing_delay = "payment_processing_delay"
+    communication_failure = "communication_failure"
+    accessibility_issue = "accessibility_issue"
+    other = "other"
+
+class Severity(str, Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+
+# Define the fields required in Claude's proposed complaint classification.
 class ComplaintAnalysis(BaseModel):
-    issue_summary: str = Field(
-        description="Briefly describe the reported issue without treating allegations as facts"
+    theme: Theme = Field(description="Proposed theme for the complaint")
+    severity: Severity = Field(description="Proposed severity for the complaint")
+    recommended_next_step: str = Field(
+        min_length=1,
+        description="One concrete handling or investigation action for staff, not an outcome"
     )
-    recorded_theme: str = Field(
-        description="Copy the theme from the complaint record"
-    )
-    recorded_severity: str = Field(
-        description="Copy the severity from the complaint record"
+    rationale: str = Field(
+        min_length=1,
+        description="Short explanation using only the supplied complaint facts"
     )
     missing_information: list[str] = Field(
         max_length=5,
-        description="Information needed to understand or investigate the complaint"
+        description="Case facts that need checking"
     )
-    suggested_next_steps: list[str] = Field(
-        max_length=5,
-        description="Practical investigation steps for staff review, without deciding the outcome"
+    human_review_required: bool = Field(
+        description="Always true: staff must review this proposal"
     )
 
 # Generate structured complaint analysis for staff review.
@@ -99,11 +133,13 @@ def analyse_complaint(complaint: dict) -> dict:
         model=MODEL,
         max_tokens=800,
         system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": build_prompt(complaint)}],
+        messages=[{"role": "user", "content": build_analysis_prompt(complaint)}],
         output_format=ComplaintAnalysis,
     )
 
     analysis = response.content[0].parsed_output
+    # Human review is a rule of the workflow, so the model cannot waive it.
+    analysis.human_review_required = True
 
     return {
         "id": complaint["id"],

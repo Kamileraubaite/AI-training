@@ -17,10 +17,16 @@ def get_product_or_404(product_id: str) -> dict:
     raise HTTPException(status_code=404, detail="Product not found")
 
 
-# Return all products, like list_firms().
+# Return products, optionally filtered by product type.
 @router.get("")
-def list_products() -> list[dict]:
-    return PRODUCTS
+def list_products(product_type: str | None = None) -> list[dict]:
+    if product_type is None:
+        return PRODUCTS
+
+    return [
+        product for product in PRODUCTS
+        if product["product_type"] == product_type
+    ]
 
 
 # Return one product, like get_firm().

@@ -1,9 +1,11 @@
+from datetime import date
+
 from fastapi import APIRouter, Depends, Header, HTTPException
 from models import ComplaintCreate, ComplaintUpdate
 from routers.customers import get_customer_or_404
 from routers.products import get_product_or_404
 
-from data import COMPLAINTS
+from data import COMPLAINTS, CUSTOMERS
 
 router = APIRouter(prefix="/complaints", tags=["complaints"])
 
@@ -18,13 +20,53 @@ def get_complaint_or_404(complaint_id: str) -> dict:
     raise HTTPException(status_code=404, detail="Complaint not found")
 
 
-# Return complaints, optionally filtered by status and theme.
+# Return complaints, optionally filtered by any combination of the query parameters.
 @router.get("")
 def list_complaints(
     status: str | None = None,
     theme: str | None = None,
+    product_id: str | None = None,
+    severity: str | None = None,
+    vulnerability_flag: bool | None = None,
+    date_from: date | None = None,
+    date_to: date | None = None,
 ) -> list[dict]:
     results = COMPLAINTS
+
+    # Keep complaints for the requested product.
+    if product_id is not None:
+        results = [
+            complaint for complaint in results
+            if complaint["product_id"] == product_id
+        ]
+
+    # Keep complaints with the requested severity.
+    if severity is not None:
+        results = [
+            complaint for complaint in results
+            if complaint["severity"] == severity
+        ]
+
+    # Keep complaints whose customer has (or has not) a recorded vulnerability.
+    if vulnerability_flag is not None:
+        flags = {customer["id"]: customer["vulnerability_flag"] for customer in CUSTOMERS}
+        results = [
+            complaint for complaint in results
+            if flags.get(complaint["customer_id"]) == vulnerability_flag
+        ]
+
+    # Dates are stored as ISO text, so they compare correctly as strings.
+    if date_from is not None:
+        results = [
+            complaint for complaint in results
+            if complaint["received_date"] >= date_from.isoformat()
+        ]
+
+    if date_to is not None:
+        results = [
+            complaint for complaint in results
+            if complaint["received_date"] <= date_to.isoformat()
+        ]
 
     # Keep complaints with the requested status.
     if status is not None:
@@ -135,3 +177,5 @@ def update_complaint(new: ComplaintUpdate,
     changes = new.model_dump(mode="json")
     complaint.update(changes)
     return complaint
+
+# pa-1oIWqfTqEKg28GX73igoRMGvprYshZPWN057ay6qoAU

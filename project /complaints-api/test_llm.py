@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
 import anthropic
+import pytest
+from pydantic import ValidationError
 import llm
 from main import app
 
@@ -60,11 +62,12 @@ def test_stream_failure_midway_adds_marker(monkeypatch):
 # Check that the endpoint returns structured complaint analysis.
 def test_analysis_returns_structured_data(monkeypatch):
     analysis = llm.ComplaintAnalysis(
-        issue_summary="The customer disputes a late-payment fee.",
-        recorded_theme="late_payment_fee",
-        recorded_severity="medium",
+        theme="late_payment_fee",
+        severity="medium",
+        recommended_next_step="Check the payment records against the fee date.",
+        rationale="The customer disputes a late-payment fee.",
         missing_information=["Payment receipt date"],
-        suggested_next_steps=["Check the payment records"],
+        human_review_required=True,
     )
 
     fake_response = {
@@ -78,4 +81,16 @@ def test_analysis_returns_structured_data(monkeypatch):
     monkeypatch.setattr(llm, "analyse_complaint", lambda complaint: fake_response)
     response = client.post("/insights/CMP-001/analyse")
     assert response.status_code == 200
-    assert response.json()["analysis"] == analysis.model_dump()
+    assert response.json()["analysis"] == analysis.model_dump(mode="json")
+
+# Check that an invalid theme is rejected by the analysis model.
+def test_analysis_rejects_unknown_theme():
+    with pytest.raises(ValidationError):
+        llm.ComplaintAnalysis(
+            theme="made_up_theme",
+            severity="low",
+            recommended_next_step="Check records.",
+            rationale="Reason.",
+            missing_information=[],
+            human_review_required=True,
+        )
