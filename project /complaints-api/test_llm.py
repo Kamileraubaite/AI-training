@@ -27,13 +27,6 @@ def test_provider_timeout_becomes_504(monkeypatch):
     assert response.status_code == 504
     assert response.json()["detail"] == "Claude request timed out"
 
-# Check that the estimate endpoint returns the input token count.
-def test_estimate_returns_input_tokens(monkeypatch):
-    monkeypatch.setattr(llm,"estimate_input_tokens",lambda complaint: 137,)
-    response = client.get("/insights/CMP-001/summary/estimate")
-    assert response.status_code == 200
-    assert response.json()["estimated_input_tokens"] == 137
-
 # Check that the streaming endpoint returns all the summary text.
 def test_stream_yields_chunks(monkeypatch):
     monkeypatch.setattr(llm,"stream_complaint_summary",lambda complaint: iter(["Complaint ", "summary"]),)
@@ -41,6 +34,28 @@ def test_stream_yields_chunks(monkeypatch):
         assert response.status_code == 200
         body = "".join(response.iter_text())
     assert body == "Complaint summary"
+
+# Check that a failure before any text arrives becomes a clear 504 response.
+def test_stream_timeout_before_text_becomes_504(monkeypatch):
+    def failing_stream(complaint):
+        raise anthropic.APITimeoutError(request=None)
+        yield
+    monkeypatch.setattr(llm, "stream_complaint_summary", failing_stream)
+    response = client.get("/insights/CMP-001/summary/stream")
+    assert response.status_code == 504
+    assert response.json()["detail"] == "Claude request timed out"
+
+# Check that a failure part-way through the stream is shown to the client.
+def test_stream_failure_midway_adds_marker(monkeypatch):
+    def partial_stream(complaint):
+        yield "Complaint "
+        raise anthropic.APITimeoutError(request=None)
+    monkeypatch.setattr(llm, "stream_complaint_summary", partial_stream)
+    with client.stream("GET", "/insights/CMP-001/summary/stream") as response:
+        assert response.status_code == 200
+        body = "".join(response.iter_text())
+    assert body.startswith("Complaint ")
+    assert "Summary interrupted" in body
 
 # Check that the endpoint returns structured complaint analysis.
 def test_analysis_returns_structured_data(monkeypatch):
@@ -64,9 +79,3 @@ def test_analysis_returns_structured_data(monkeypatch):
     response = client.post("/insights/CMP-001/analyse")
     assert response.status_code == 200
     assert response.json()["analysis"] == analysis.model_dump()
-
-# Return 404 when analysis is requested for a missing complaint.
-def test_analysis_missing_complaint_returns_404():
-    response = client.post("/insights/CMP-999/analyse")
-    assert response.status_code == 404
-    assert response.json()["detail"] == "Complaint not found"

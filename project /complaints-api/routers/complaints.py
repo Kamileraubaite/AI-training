@@ -135,10 +135,3 @@ def update_complaint(new: ComplaintUpdate,
     changes = new.model_dump(mode="json")
     complaint.update(changes)
     return complaint
-
-# Delete a complaint from the in-memory records.
-@router.delete("/{complaint_id}", status_code=204)
-def delete_complaint(
-    complaint: dict = Depends(get_complaint_or_404),
-) -> None:
-    COMPLAINTS.remove(complaint)

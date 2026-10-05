@@ -61,16 +61,6 @@ def summarise_complaint(complaint: dict) -> dict:
         "stop_reason": response.stop_reason,
     }
 
-# Count the input tokens without generating a complaint summary.
-def estimate_input_tokens(complaint: dict) -> int:
-    counted = client.messages.count_tokens(
-        model=MODEL,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": build_prompt(complaint)}],
-    )
-
-    return counted.input_tokens
-
 # Yield the complaint summary text as Claude generates it.
 def stream_complaint_summary(complaint: dict):
     with client.messages.stream(
