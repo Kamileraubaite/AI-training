@@ -5,6 +5,7 @@ import anthropic
 from anthropic import APIStatusError, APITimeoutError, RateLimitError
 
 from pydantic import BaseModel, Field
+import grounding
 
 MODEL = "claude-haiku-4-5-20251001"
 
@@ -22,9 +23,9 @@ client = anthropic.Anthropic(
 # DATA GOES IN USER
 
 SYSTEM_PROMPT = (
-    "You are legal market analyst writing for an institutional audience. "
-    "Use British English, Use only figures given to you. "
-    "Never invent numbers, rankings or facts that are not in the data provided. "
+    "You are a legal market analyst writing for an institutional audience. "
+    "Use British English. Use only the figures given to you. "
+    "Never invent numbers, rankings or facts that are not in the data provided."
 )
 
 def build_prompt(firm_id: dict) -> str:
@@ -113,22 +114,21 @@ def analyse_firm(firm: dict) -> dict:
 
 GROUNDED_SYSTEM_PROMPT = (
     "You are a legal market analyst. Answer using ONLY the context provided. "
-    "Cite the document id in sqaure brackets after each claim, like [doc-001]. "
-    "If the context does not contain the answer, say exactly: "
-    "The provided documents do not answer the question. "
-    "Never use knowledge from outside the context. Use british English. No em dash characters. "
+    "Cite the document id in square brackets after each claim, like [doc-001]. "
+    f"If the context does not contain the answer, say exactly: '{grounding.REFUSAL_SENTENCE}' "
+    "Never use knowledge from outside the context. Use British English. No em dash characters."
 )
 
 
 # notice where the context goes...
 # rules in system
 # data in user
-def answer_from_context(question: str, context: str) -> dict:
+def answer_from_context(question: str, context: str, system: str = GROUNDED_SYSTEM_PROMPT) -> dict:
     """Answer strictly from retrieved context... The G in RAG."""
     response = client.messages.create(
         model=MODEL,
         max_tokens=500,
-        system=GROUNDED_SYSTEM_PROMPT,
+        system=system,
         messages=[{
             "role": "user",
             "content": f"context: \n\n{context}\n\nQuestion: {question}",

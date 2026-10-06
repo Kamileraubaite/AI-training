@@ -2,7 +2,11 @@ from anthropic import APIStatusError, APITimeoutError, RateLimitError
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
+import logging  # CHANGED: WAS A HALF-TYPED "im" LINE THAT CRASHED THE WHOLE APP
 import agent
+
+# CHANGED: logger WAS USED BELOW BUT NEVER CREATED
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/agent", tags=["agent"])
 
@@ -40,9 +44,6 @@ def ask(q: AgentQuestion) -> dict:
         ) from exc
 
     except Exception as exc:
-        # Record the actual error in the server logs.
-        logger.exception("Unexpected error in /agent/ask")
-
         # Give the caller a controlled JSON error, not a bare crash.
         raise HTTPException(
             status_code=500,

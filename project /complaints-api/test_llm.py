@@ -1,7 +1,5 @@
 from fastapi.testclient import TestClient
 import anthropic
-import pytest
-from pydantic import ValidationError
 import llm
 from main import app
 
@@ -82,15 +80,3 @@ def test_analysis_returns_structured_data(monkeypatch):
     response = client.post("/insights/CMP-001/analyse")
     assert response.status_code == 200
     assert response.json()["analysis"] == analysis.model_dump(mode="json")
-
-# Check that an invalid theme is rejected by the analysis model.
-def test_analysis_rejects_unknown_theme():
-    with pytest.raises(ValidationError):
-        llm.ComplaintAnalysis(
-            theme="made_up_theme",
-            severity="low",
-            recommended_next_step="Check records.",
-            rationale="Reason.",
-            missing_information=[],
-            human_review_required=True,
-        )

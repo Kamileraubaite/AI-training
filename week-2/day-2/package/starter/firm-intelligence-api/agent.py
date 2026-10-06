@@ -97,6 +97,16 @@ def ask_with_tools(question:str) -> dict:
         
         messages.append({"role": "user", "content": tool_results})
 
+    # CHANGED: ADDED THIS RETURN. BEFORE, WHEN THE LOOP RAN OUT OF ITERATIONS THE FUNCTION
+    # RETURNED NOTHING (None). NOW THE CALLER GETS A CLEAR "DID NOT COMPLETE" RESULT.
+    return {
+        "answer": "",
+        "completed": False,
+        "tool_calls_made": tool_calls_made,
+        "input_tokens": total_input_tokens,
+        "output_tokens": total_output_tokens,
+        "stop_reason": "max_iterations",
+    }
 
 
 def _execute_tool(name: str, tool_input: dict) -> tuple[str, bool]:

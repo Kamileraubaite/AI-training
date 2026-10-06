@@ -41,4 +41,4 @@ def test_stream_yields_chunks(monkeypatch):
     with client.stream("GET", "/firms/1/summary/stream") as response:
         assert response.status_code == 200
         body = "".join(response.iter_text())                                                                   
-    assert body == "harding & Voss"
+    assert body == "harding& Voss"

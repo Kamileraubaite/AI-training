@@ -1,6 +1,4 @@
 import os
-from enum import Enum
-
 import anthropic
 
 from pydantic import BaseModel, Field
@@ -93,24 +91,15 @@ def stream_complaint_summary(complaint: dict):
             yield text
 
 
-# The themes and severities Claude may propose.
-class Theme(str, Enum):
-    late_payment_fee = "late_payment_fee"
-    incorrect_charge = "incorrect_charge"
-    payment_processing_delay = "payment_processing_delay"
-    communication_failure = "communication_failure"
-    accessibility_issue = "accessibility_issue"
-    other = "other"
-
-class Severity(str, Enum):
-    low = "low"
-    medium = "medium"
-    high = "high"
-
 # Define the fields required in Claude's proposed complaint classification.
 class ComplaintAnalysis(BaseModel):
-    theme: Theme = Field(description="Proposed theme for the complaint")
-    severity: Severity = Field(description="Proposed severity for the complaint")
+    theme: str = Field(
+        description=(
+            "One of: late_payment_fee, incorrect_charge, payment_processing_delay, "
+            "communication_failure, accessibility_issue, other"
+        )
+    )
+    severity: str = Field(description="One of: low, medium, high")
     recommended_next_step: str = Field(
         min_length=1,
         description="One concrete handling or investigation action for staff, not an outcome"
@@ -148,3 +137,13 @@ def analyse_complaint(complaint: dict) -> dict:
         "output_tokens": response.usage.output_tokens,
         "stop_reason": response.stop_reason,
     }
+
+GROUNDED_SYSTEM_PROMPT = (
+    "You help banking staff summarise complaint records. Use British English. "
+    "Answer only from the documents provided. Do not invent facts. Cite factual sources using " 
+    "IDs such as [DOC-001]. "
+    "Never invent rules, compensation amounts or complaint outcomes. "
+    "If information is missing, say so. Or if evidence is insufficient, say: " 
+    "'The provided documents do not contain enough information to answer this question.' "
+    "Guidance is for staff review, not for customers. "
+)

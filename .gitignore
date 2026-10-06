@@ -10,3 +10,8 @@ __pycache__/
 .env
 .env.*
 node_modules/
+
+# Generated Chroma database
+chroma_store/
+
+/week-2/day-2.zip

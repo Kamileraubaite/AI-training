@@ -62,4 +62,4 @@ def search(question: str, top_k: int = 3) -> list[dict]:
 # chroma return distance, we return similarity
 # in chroma, lower is better
 # higher was better for ours.... (1 -  distance) converts
-# upsert instead of add -> add fails on an id that already exists, upsert overwrites 
+# upsert instead of add -> add fails on an id that already exists, upsert overwrites p
