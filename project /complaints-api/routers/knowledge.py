@@ -4,6 +4,7 @@ from voyageai.error import RateLimitError, Timeout, VoyageError
 import llm
 import os
 import anthropic
+import grounding
 
 # Minimum similarity required for a document to support an answer.
 RELEVANCE_FLOOR = float(os.environ.get("RELEVANCE_FLOOR", "0.35"))
@@ -97,4 +98,6 @@ def ask(q: Question) -> dict:
         "input_tokens": result["input_tokens"],
         "output_tokens": result["output_tokens"],
         "stop_reason": result["stop_reason"],
+        "grounding": grounding.check_citations(result["answer"],[h["id"] for h in usable],
+),
     }

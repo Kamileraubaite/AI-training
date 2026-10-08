@@ -141,7 +141,7 @@ def analyse_complaint(complaint: dict) -> dict:
 GROUNDED_SYSTEM_PROMPT = (
     "You help banking staff summarise complaint records. Use British English. "
     "Answer only from the documents provided. Do not invent facts. Cite factual sources using " 
-    "IDs such as [DOC-001]. "
+    "IDs such as [doc-001]. "
     "Never invent rules, compensation amounts or complaint outcomes. "
     "If information is missing, say so. Or if evidence is insufficient, say: " 
     "'The provided documents do not contain enough information to answer this question.' "
