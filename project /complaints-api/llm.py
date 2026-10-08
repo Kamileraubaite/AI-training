@@ -147,3 +147,22 @@ GROUNDED_SYSTEM_PROMPT = (
     "'The provided documents do not contain enough information to answer this question.' "
     "Guidance is for staff review, not for customers. "
 )
+
+# Answer the question using only the retrieved banking context.
+def answer_from_context(question: str, context: str) -> dict:
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=500,
+        system=GROUNDED_SYSTEM_PROMPT,
+        messages=[{
+            "role": "user",
+            "content": f"context: \n\n{context}\n\nQuestion: {question}",
+        }],
+    )
+
+    return {
+        "answer": response.content[0].text,
+        "input_tokens": response.usage.input_tokens,
+        "output_tokens": response.usage.output_tokens,
+        "stop_reason": response.stop_reason,
+    }

@@ -1,6 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from voyageai.error import RateLimitError, Timeout, VoyageError
+import llm
+import os
+import anthropic
+
+# Minimum similarity required for a document to support an answer.
+RELEVANCE_FLOOR = float(os.environ.get("RELEVANCE_FLOOR", "0.35"))
 
 import knowledge_store as knowledge
 
@@ -41,3 +47,54 @@ def search(q: Question) -> dict:
         raise HTTPException(status_code=502, detail="Embedding provider unavailable")
 
     return {"question": q.question, "results": results}
+
+# Retrieve relevant documents, then answer or refuse.
+@router.post("/ask")
+def ask(q: Question) -> dict:
+    # Find documents relevant to the question.
+    try:
+        hits = knowledge.search(q.question, q.top_k)
+    except RuntimeError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Timeout:
+        raise HTTPException(status_code=504, detail="Embedding provider timed out")
+    except RateLimitError:
+        raise HTTPException(status_code=429, detail="Embedding provider rate limited")
+    except VoyageError:
+        raise HTTPException(status_code=502, detail="Embedding provider unavailable")
+
+    # Keep only documents that meet the relevance floor.
+    usable = [hit for hit in hits if hit["score"] >= RELEVANCE_FLOOR]
+
+    # Refuse before calling Claude if no documents qualify.
+    if not usable:
+        return {
+            "question": q.question,
+            "answer": None,
+            "refused": True,
+            "reason": "No document in the corpus is relevant to that question.",
+            "sources": [],
+        }
+
+    # Include document IDs so Claude can cite its evidence.
+    context = "\n\n".join(f"[{h['id']}] {h['title']}\n{h['text']}" for h in usable)
+
+    try:
+        result = llm.answer_from_context(q.question, context)
+    except anthropic.APITimeoutError:
+        raise HTTPException(status_code=504, detail="Answer provider timed out")
+    except anthropic.RateLimitError:
+        raise HTTPException(status_code=429, detail="Answer provider rate limited")
+    except (anthropic.APIConnectionError, anthropic.APIStatusError):
+        raise HTTPException(status_code=502, detail="Answer provider unavailable")
+
+    # Return the answer, supporting sources and token usage.
+    return {
+        "question": q.question,
+        "answer": result["answer"],
+        "refused": False,
+        "sources": [{"id": h["id"],"title": h["title"],"score": round(h["score"], 3),}for h in usable],
+        "input_tokens": result["input_tokens"],
+        "output_tokens": result["output_tokens"],
+        "stop_reason": result["stop_reason"],
+    }
