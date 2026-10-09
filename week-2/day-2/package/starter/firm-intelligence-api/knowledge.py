@@ -132,7 +132,3 @@ def search(question: str, top_k: int = 3) -> list[dict]:
     # With top_k=3, [:3] returns positions 0, 1 and 2
     # By contrast, [3] would return only the fourth result
     return scored[:top_k]
-
-
-
-## pa-1oIWqfTqEKg28GX73igoRMGvprYshZPWN057ay6qoAU

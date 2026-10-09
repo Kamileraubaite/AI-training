@@ -1,0 +1,82 @@
+"""
+One chroma collection per chunking strategy... so that strategies can be compared side to side.
+
+Each collection remembers a "fingerprint" of the chunks and the embedding model that built it.
+If either changes, the collection is rebuilt from scratch. 
+"""
+
+import hashlib
+import chromadb
+
+import chunking
+import knowledge
+from corpus import CORPUS_DOCUMENTS
+from documents import DOCUMENTS
+
+ALL_DOCS = DOCUMENTS + CORPUS_DOCUMENTS
+
+BATCH_SIZE = 128 # Voyage's own guidance: batch documents to stay well inside rate limits
+
+chroma = chromadb.PersistentClient(path="./chroma_store")
+
+
+def collection_name(strategy: str) -> str:
+    return f"chunks_{strategy}"
+
+
+def collection_for(strategy: str):
+    return chroma.get_or_create_collection(
+        name=collection_name(strategy),
+        configuration={"hnsw": {"space": "cosine"}}
+    )
+
+def embed_batched(texts: list[str], input_type: str) -> tuple[list[list[float]], int]:
+    """Embed any number of texts in batches. Return all vectors and the total token count. """
+    vectors = list[list[float]] = []
+    tokens = 0
+
+    for start in range(0, len(texts), BATCH_SIZE):
+        batch_vectors, batch_tokens = knowledge.embed_texts(texts[start:start+BATCH_SIZE], input_type=input_type)
+        vectors.extend(batch_vectors)
+        tokens += batch_tokens
+    return vectors, tokens
+
+
+# The fingerprint changes if the text, the model or the order changes... and stays put of nothing does. 
+def fingerprint(chunks: list[dict]) -> str:
+    # SHA-256 - A recipe that turns any text into a fixed-legth code (64 chars)
+    digest = hashlib.sha256(knowledge.EMBED_MODEL.encode())
+    for c in chunks:
+        digest.update(f"{c['id']}\n{c['text']}\n".encode())
+    return digest.hexdigest()[:16]  # first 16 chars is enough to detect changes
+
+
+
+def build(strategy: str, force: bool = False) -> dict:
+    """Make sure the strategy's collection matches the current corpus, chunker and model."""
+    """ Answers one q... is the index i already have still correct?"""
+    # pt1
+    chunks = chunking.chunk_corpus(ALL_DOCS, strategy)
+    fp = fingerprint(chunks)
+    col = collection_for(strategy) 
+    stored = col.get(limit=1, include=["metadatas"])["metadatas"]
+    if not force and col.count() == len(chunks) and stored and stored[0].get("fingerprint") == fp:
+        return {"strategy": strategy,"chunks": len(chunks), "embedding tokens": 0, "rebuilt": False}
+    
+    # pt 2 - the rebuild
+    try:
+        chroma.delete_collection(name=collection_name(strategy))
+    except Exception:
+        pass
+
+    col = collection_for(strategy)
+    vectors, tokens = embed_batched([c["text"] for c in chunks], input_type="document")
+    col.upsert(
+        ids=[c["id"] for c in chunks],
+        embeddings=vectors,
+        documents=[c["text"] for c in chunks],
+        metadatas=[{"doc_id": c["doc_id"], "title": c["title"], "fingerprint": fp} for c in chunks]
+    )
+    return {"strategy": strategy,"chunks": len(chunks), "embedding tokens": tokens, "rebuilt": True}
+# the vectors come back in the voyage the same way they went in, so you can just extend a list with them.
+# at the moment were able to population each of the collections 
