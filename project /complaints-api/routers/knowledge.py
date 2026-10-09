@@ -7,7 +7,7 @@ import anthropic
 import grounding
 
 # Minimum similarity required for a document to support an answer.
-RELEVANCE_FLOOR = float(os.environ.get("RELEVANCE_FLOOR", "0.35"))
+RELEVANCE_FLOOR = float(os.getenv("RELEVANCE_FLOOR", "0.45"))
 
 import knowledge_store as knowledge
 
