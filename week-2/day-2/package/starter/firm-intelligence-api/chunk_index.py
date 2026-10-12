@@ -32,7 +32,7 @@ def collection_for(strategy: str):
 
 def embed_batched(texts: list[str], input_type: str) -> tuple[list[list[float]], int]:
     """Embed any number of texts in batches. Return all vectors and the total token count. """
-    vectors = list[list[float]] = []
+    vectors: list[list[float]] = []
     tokens = 0
 
     for start in range(0, len(texts), BATCH_SIZE):
@@ -61,7 +61,7 @@ def build(strategy: str, force: bool = False) -> dict:
     col = collection_for(strategy) 
     stored = col.get(limit=1, include=["metadatas"])["metadatas"]
     if not force and col.count() == len(chunks) and stored and stored[0].get("fingerprint") == fp:
-        return {"strategy": strategy,"chunks": len(chunks), "embedding tokens": 0, "rebuilt": False}
+        return {"strategy": strategy,"chunks": len(chunks), "embedding_tokens": 0, "rebuilt": False}
     
     # pt 2 - the rebuild
     try:
@@ -77,6 +77,43 @@ def build(strategy: str, force: bool = False) -> dict:
         documents=[c["text"] for c in chunks],
         metadatas=[{"doc_id": c["doc_id"], "title": c["title"], "fingerprint": fp} for c in chunks]
     )
-    return {"strategy": strategy,"chunks": len(chunks), "embedding tokens": tokens, "rebuilt": True}
+    return {"strategy": strategy,"chunks": len(chunks), "embedding_tokens": tokens, "rebuilt": True}
 # the vectors come back in the voyage the same way they went in, so you can just extend a list with them.
 # at the moment were able to population each of the collections 
+
+# CURRENT 
+
+# NEW FUNCTION ADDS - search_with_vectors
+# the read side
+# it takes question vectors that are already embedded, so questions are embedded once and resused across all 6 categories
+
+def search_with_vectors(strategy: str, query_vectors: list[list[float]], k: int) -> list[list[dict]]:
+    """
+    we embed the question once, then searches many strategies with the same vectors.
+    """
+    col = collection_for(strategy)
+    if col.count() == 0:
+        raise RuntimeError(f"Index for '{strategy}' is empty. Please build it first.")
+    
+    # the search
+    results = col.query(query_embeddings=query_vectors, n_results=min(k, col.count()))
+    # what result looks like 
+        # - result["ids"] - a list of 2 lists, each holding 3 ids
+        # - result["documents"] - a list of 2 lists, each holding 3 texts
+        # - result["metadatas"] - a list of 2 lists, each holding 3 metadata dictionaries
+        # - result["distances"] - a list of 2 lists, each holding 3 distances 
+        # - e.g. ids          [ 'doc-001#00', 'doc-001#01', 'doc-007#00' ]
+        # - e.g. documents    [0.375, 0.389, 0.30
+    return[
+        # chroma returns 4 parallel nested lists
+        [
+            {
+                "id": meta["doc_id"], "chunk_id": chunk_id, "title": meta["title"], "text": text, "score": 1 - distance}
+                for chunk_id, text, meta, distance in zip(ids, docs, metas, dists)
+            
+        ]
+        for ids, docs, metas, dists in zip(
+            results["ids"], results["documents"], results["metadatas"], results["distances"]
+        )
+        # Chroma returns
+    ]
