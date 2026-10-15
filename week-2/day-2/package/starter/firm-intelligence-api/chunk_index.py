@@ -5,6 +5,16 @@ Each collection remembers a "fingerprint" of the chunks and the embedding model 
 If either changes, the collection is rebuilt from scratch. 
 """
 
+# Things to note from our switch to chroma
+
+# embed_texts is imported not rewritten... embedding provider hasnt changed... only the storage has
+# configuration=.... -> not optional, we are choosing something different from chromas default
+# chroma return distance, we return similarity
+# in chroma, lower is better
+# higher was better for ours.... (1 -  distance) converts
+# upsert instead of add -> add fails on an id that already exists, upsert overwrites p
+
+
 import hashlib
 import chromadb
 
@@ -117,3 +127,29 @@ def search_with_vectors(strategy: str, query_vectors: list[list[float]], k: int)
         )
         # Chroma returns
     ]
+
+
+"""
+a chunk that only keyword search found has npo cosine score... our relevant gate needs one
+"""
+
+def cosine_for(strategy: str, query_vector: list[float], chunk_ids: list[str]) -> dict[str, float]:
+    if not chunk_ids:
+        return {}
+    
+    stored = collection_for(strategy).get(ids=chunk_ids, include=["embeddings", "metadatas"])
+
+    return {
+        chunk_id: float(knowledge.cosine_similarity(query_vector, list(vector)))
+        for chunk_id, vector in zip(stored["ids"], stored["embeddings"])
+    }
+
+# where it fits in hybrid.py
+    # vector search returns its top 10 with cosine
+    # keyword search returns its top 10 
+    # RRF merges them
+    # any chunk in the keyword list but NOT in the vector list is passed to "cosine_for"
+        # score >= 0.45 orrrr exact_match
+
+# question mentions 3307
+# chunk mentions 3307

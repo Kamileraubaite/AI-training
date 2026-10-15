@@ -286,3 +286,79 @@ with summary_tab:
                     "Could not communicate with the API. "
                     "Check that FastAPI is running on port 8000."
                 )
+
+# Help staff review complaints by their recorded status and severity.
+with triage_tab:
+    st.subheader("Complaint triage")
+    st.write("Filter complaint records to help staff decide what to review.")
+
+    with st.form("triage_form"):
+        status_filter = st.selectbox(
+            "Status",
+            ["All", "open", "under_review", "resolved"],
+        )
+
+        severity_filter = st.selectbox(
+            "Severity",
+            ["All", "low", "medium", "high", "unassessed"],
+        )
+
+        triage_submitted = st.form_submit_button("Show complaints")
+
+        # Request complaints matching the selected filters.
+    if triage_submitted:
+        params = {}
+
+        if status_filter != "All":
+            params["status"] = status_filter
+
+        if severity_filter != "All":
+            params["severity"] = severity_filter
+
+        try:
+            with st.spinner("Loading complaints..."):
+                response = httpx.get(
+                    f"{API_URL}/complaints",
+                    params=params,
+                    timeout=10.0,
+                )
+                response.raise_for_status()
+                complaints = response.json()
+
+            if not isinstance(complaints, list):
+                raise ValueError("Expected a list of complaints.")
+
+            if not complaints:
+                st.info("No complaints match these filters.")
+            else:
+                st.metric("Matching complaints", len(complaints))
+
+                st.dataframe(
+                    [
+                        {
+                            "Complaint ID": c["id"],
+                            "Product ID": c["product_id"],
+                            "Theme": c["theme"],
+                            "Severity": c["severity"],
+                            "Status": c["status"],
+                            "Received date": c["received_date"],
+                        }
+                        for c in complaints
+                    ],
+                    hide_index=True,
+                )
+
+        except httpx.HTTPStatusError as exc:
+            show_http_error(exc.response.status_code)
+
+        except httpx.TimeoutException:
+            st.error("Loading complaints timed out. Please try again.")
+
+        except httpx.RequestError:
+            st.error(
+                "Could not communicate with the API. "
+                "Check that FastAPI is running on port 8000."
+            )
+
+        except (ValueError, KeyError, TypeError):
+            st.error("The complaints API returned an unexpected response.")

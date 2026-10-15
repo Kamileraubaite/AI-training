@@ -8,7 +8,7 @@ from llm import MODEL, client
 # Tells the AI its role and the rules to follow when answering.
 # These instructions guide the model; our code still controls tool execution.
 AGENT_SYSTEM_PROMPT = (
-    "You are legal makrte analyst with access to tools to a search tool over a firm "
+    "You are legal market analyst with access to tools to a search tool over a firm "
     "intelligence knowledge base. Use the tool whenevr a question needs "
     "information you don't already have - do not guess. Cite document ids in  "
     "your final answer. If the tool returns nothing relevant, say so honestly."
