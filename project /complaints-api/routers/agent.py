@@ -1,4 +1,4 @@
-from anthropic import APIStatusError, APITimeoutError, RateLimitError
+from anthropic import APIConnectionError ,APIStatusError, APITimeoutError, RateLimitError
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -33,7 +33,7 @@ def ask(q: AgentQuestion) -> dict:
             detail="The AI provider's rate limit was reached. Try again later.",
         ) from exc
 
-    except APIStatusError as exc:
+    except (APIConnectionError, APIStatusError) as exc:
         raise HTTPException(
             status_code=502,
             detail="The AI provider could not complete the request.",
