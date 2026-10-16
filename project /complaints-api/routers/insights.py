@@ -64,3 +64,21 @@ def analyse(
         raise HTTPException(status_code=429, detail="Claude rate limit reached")
     except (APIConnectionError, APIStatusError):
         raise HTTPException(status_code=502, detail="Claude service unavailable")
+    
+
+# Estimate input tokens before generating a complaint summary.
+@router.post("/{complaint_id}/summary/estimate")
+def estimate_summary(
+    complaint: dict = Depends(get_complaint_or_404),
+) -> dict:
+    try:
+        return {
+            "id": complaint["id"],
+            "input_tokens": llm.estimate_input_tokens(complaint),
+        }
+    except APITimeoutError:
+        raise HTTPException(status_code=504, detail="Claude request timed out")
+    except RateLimitError:
+        raise HTTPException(status_code=429, detail="Claude rate limit reached")
+    except (APIConnectionError, APIStatusError):
+        raise HTTPException(status_code=502, detail="Claude service unavailable")

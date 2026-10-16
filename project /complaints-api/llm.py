@@ -79,6 +79,16 @@ def summarise_complaint(complaint: dict) -> dict:
         "stop_reason": response.stop_reason,
     }
 
+# messages.count_tokens tell you how big a request is WITHOUT SENDING IT...
+def estimate_input_tokens(firm: dict) -> int:
+    """Count tokens BEFORE sending. Costs nothing, tells you what a call will cost"""
+    counted = client.messages.count_tokens(
+        model=MODEL,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": build_prompt(firm)}],
+    )
+    return counted.input_tokens
+
 # Yield the complaint summary text as Claude generates it.
 def stream_complaint_summary(complaint: dict):
     with client.messages.stream(
