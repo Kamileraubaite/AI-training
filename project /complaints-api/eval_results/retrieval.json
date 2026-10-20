@@ -1,0 +1,105 @@
+{
+  "whole_document": {
+    "recall@1": 0.793,
+    "recall@3": 1,
+    "recall@5": 1,
+    "mrr": 0.891,
+    "context_words@3": 335,
+    "top_score_answerable": 0.523,
+    "top_score_unanswerable": 0.313,
+    "recall@3_by_kind": {
+      "exact-id": 1,
+      "lookup": 1,
+      "negation": 1,
+      "numeric": 1
+    },
+    "missed@3": []
+  },
+  "fixed_100": {
+    "recall@1": 0.655,
+    "recall@3": 0.931,
+    "recall@5": 0.931,
+    "mrr": 0.764,
+    "context_words@3": 241,
+    "top_score_answerable": 0.521,
+    "top_score_unanswerable": 0.337,
+    "recall@3_by_kind": {
+      "exact-id": 1,
+      "lookup": 0.94,
+      "negation": 0.9,
+      "numeric": 1
+    },
+    "missed@3": [
+      "q03",
+      "q18"
+    ]
+  },
+  "fixed_overlap_25": {
+    "recall@1": 0.793,
+    "recall@3": 0.966,
+    "recall@5": 1,
+    "mrr": 0.886,
+    "context_words@3": 218,
+    "top_score_answerable": 0.574,
+    "top_score_unanswerable": 0.324,
+    "recall@3_by_kind": {
+      "exact-id": 1,
+      "lookup": 0.94,
+      "negation": 1,
+      "numeric": 1
+    },
+    "missed@3": [
+      "q28"
+    ]
+  },
+  "sentences_100": {
+    "recall@1": 0.724,
+    "recall@3": 0.966,
+    "recall@5": 1,
+    "mrr": 0.842,
+    "context_words@3": 210,
+    "top_score_answerable": 0.539,
+    "top_score_unanswerable": 0.316,
+    "recall@3_by_kind": {
+      "exact-id": 1,
+      "lookup": 0.94,
+      "negation": 1,
+      "numeric": 1
+    },
+    "missed@3": [
+      "q28"
+    ]
+  },
+  "sections_plain": {
+    "recall@1": 0.793,
+    "recall@3": 1,
+    "recall@5": 1,
+    "mrr": 0.891,
+    "context_words@3": 335,
+    "top_score_answerable": 0.518,
+    "top_score_unanswerable": 0.316,
+    "recall@3_by_kind": {
+      "exact-id": 1,
+      "lookup": 1,
+      "negation": 1,
+      "numeric": 1
+    },
+    "missed@3": []
+  },
+  "sections_contextual": {
+    "recall@1": 0.897,
+    "recall@3": 1,
+    "recall@5": 1,
+    "mrr": 0.948,
+    "context_words@3": 351,
+    "top_score_answerable": 0.518,
+    "top_score_unanswerable": 0.304,
+    "recall@3_by_kind": {
+      "exact-id": 1,
+      "lookup": 1,
+      "negation": 1,
+      "numeric": 1
+    },
+    "missed@3": []
+  }
+}
