@@ -1,0 +1,32 @@
+{
+  "floor": 0.45,
+  "whole_document": {
+    "answerable_accuracy": 0.828,
+    "refusal_accuracy": 1,
+    "false_refusals": [
+      "q02",
+      "q06",
+      "q10",
+      "q28"
+    ],
+    "wrong_or_unrefused": [
+      "q01"
+    ],
+    "model_calls": 26,
+    "avg_input_tokens": 367
+  },
+  "sections_contextual": {
+    "answerable_accuracy": 0.828,
+    "refusal_accuracy": 1,
+    "false_refusals": [
+      "q02",
+      "q04",
+      "q06",
+      "q26",
+      "q28"
+    ],
+    "wrong_or_unrefused": [],
+    "model_calls": 24,
+    "avg_input_tokens": 385
+  }
+}
