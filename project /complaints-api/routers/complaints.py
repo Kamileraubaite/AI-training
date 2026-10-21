@@ -177,5 +177,3 @@ def update_complaint(new: ComplaintUpdate,
     changes = new.model_dump(mode="json")
     complaint.update(changes)
     return complaint
-
-# pa-1oIWqfTqEKg28GX73igoRMGvprYshZPWN057ay6qoAU

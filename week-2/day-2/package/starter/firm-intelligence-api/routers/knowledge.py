@@ -1,14 +1,18 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from anthropic import APIStatusError, APITimeoutError, RateLimitError
+
+import context
+import gate
 import grounding
 import knowledge_store as knowledge
 import llm
 import hybrid
+import settings
 
 # Our relevance floor
 # below this we treat the retrieved context as not actually relevant
-RELEVANCE_FLOOR = 0.35
+RELEVANCE_FLOOR = 0.45
 
 # create your router
 router = APIRouter(prefix="/knowledge", tags=["knowledge"])
@@ -22,7 +26,10 @@ class Question(BaseModel):
 
 @router.post("/index")
 def rebuild_index():
-    tokens = knowledge.build_index()
+    try:
+        tokens = knowledge.build_index()
+    except RuntimeError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     return {"indexed": knowledge.count(), "embeddings": tokens}
 
 
@@ -58,8 +65,8 @@ def ask(q: Question):
 
     # 2. Filter, and decide whether to make a call to the model at all
     # (compare against our RELEVANCE_FLOOR)
-    usable = [hit for hit in hits if hybrid.is_usable(hit, RELEVANCE_FLOOR)]
-
+    # usable = [hit for hit in hits if hybrid.is_usable(hit, RELEVANCE_FLOOR)]
+    usable = [hit for hit in hits if gate.is_usable(hit, RELEVANCE_FLOOR, settings.RERANK_FLOOR)]
     if not usable:
         return {
             "question": q.question,

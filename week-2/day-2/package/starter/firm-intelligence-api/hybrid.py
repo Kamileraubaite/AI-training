@@ -59,7 +59,7 @@ def search_with_vector(strategy: str, question: str, query_vector: list[float], 
 
     unknown = [chunk_id for chunk_id in keyword_only if chunk_id not in extra_cosine]
     if unknown:
-        raise RuntimeError(f"{unknown[0]} is ion the keyword index but not in the vector index. Rebuild with POST /knowledge/index")
+        raise RuntimeError(f"{unknown[0]} is in the keyword index but not in the vector index. Rebuild with POST /knowledge/index")
     
     # find the numbers in the question (e.g 3307)
     wanted = identifiers(question)
@@ -84,4 +84,4 @@ def search_with_vector(strategy: str, question: str, query_vector: list[float], 
         hit["rrf"] = round(rrf, 5)
         hits.append(hit)
 
-        return hits
+    return hits

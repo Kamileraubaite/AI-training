@@ -89,3 +89,14 @@ def search_with_vectors(strategy: str,query_vectors: list[list[float]],k: int) -
         results["ids"],results["documents"],results["metadatas"],results["distances"],
         )
     ]
+
+def cosine_for(strategy: str, query_vector: list[float], chunk_ids: list[str]) -> dict[str, float]:
+    if not chunk_ids:
+        return {}
+    
+    stored = collection_for(strategy).get(ids=chunk_ids, include=["embeddings", "metadatas"])
+
+    return {
+        chunk_id: float(knowledge.cosine_similarity(query_vector, list(vector)))
+        for chunk_id, vector in zip(stored["ids"], stored["embeddings"])
+    }

@@ -1,5 +1,6 @@
 """Embedding mechanics... nothing in here knows about FastAPI"""
 
+import math
 import os
 
 import voyageai
@@ -22,3 +23,10 @@ def embed_texts(texts: list[str], input_type: str) -> tuple[list[list[float]], i
 
     # Return the embedding vectors and the number of tokens used
     return result.embeddings, result.total_tokens
+
+def cosine_similarity(a: list[float], b: list[float]) -> float:
+    dot = sum(x * y for x, y in zip(a, b))
+    norm_a = math.sqrt(sum(x * x for x in a))
+    norm_b = math.sqrt(sum(y * y for y in b))
+
+    return dot / (norm_a * norm_b) 
