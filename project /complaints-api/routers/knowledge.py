@@ -5,6 +5,7 @@ import llm
 import anthropic
 import grounding
 import os
+import hybrid
 
 # Minimum similarity required for a document to support an answer.
 RELEVANCE_FLOOR = float(os.environ.get("RELEVANCE_FLOOR", "0.45"))
@@ -65,7 +66,7 @@ def ask(q: Question) -> dict:
         raise HTTPException(status_code=502, detail="Embedding provider unavailable")
 
     # Keep only documents that meet the relevance floor.
-    usable = [hit for hit in hits if hit["score"] >= RELEVANCE_FLOOR]
+    usable = [hit for hit in hits if hybrid.is_usable(hit, RELEVANCE_FLOOR)]
 
     # Refuse before calling Claude if no documents qualify.
     if not usable:
