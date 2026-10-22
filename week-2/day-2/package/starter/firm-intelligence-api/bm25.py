@@ -47,7 +47,7 @@ class BM25Index:
         df = self.doc_freq.get(term, 0)
         return math.log(1 + (n - df + 0.5) / (df + 0.5))
     
-    def score (self, query_terms: list[str], position: int) -> float:
+    def score(self, query_terms: list[str], position: int) -> float:
         """BM25 score of one chunk (by its position in the list)... for a list of query terms"""
         counts = self.term_counts[position]
         length_norm = (1 - B) + B * self.lengths[position] / self.avg_length
