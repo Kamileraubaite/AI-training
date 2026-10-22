@@ -36,7 +36,7 @@ def search_with_vector(strategy: str, question: str, query_vector: list[float], 
     ])[:top_k]
 
     by_vector = {hit["chunk_id"]: hit for hit in vector_hits}
-    by_keyword = {hit["chunk"]["id"]: hit for hit in keyword_hits}
+    by_keyword = {hit["chunk"]["id"]: ["chunk"] for hit in keyword_hits}
 
     keyword_only = [chunk_id for chunk_id in by_keyword if chunk_id not in by_vector]
     extra_cosine = chunk_index.cosine_for(strategy, query_vector, keyword_only)
@@ -52,7 +52,7 @@ def search_with_vector(strategy: str, question: str, query_vector: list[float], 
         if chunk_id in by_vector:
             hit = by_vector[chunk_id] 
         else:
-            chunk = by_keyword[chunk_id],
+            chunk = by_keyword[chunk_id]
             hit = {
                 "id": chunk["doc_id"],
                 "chunk_id": chunk_id,
@@ -62,5 +62,8 @@ def search_with_vector(strategy: str, question: str, query_vector: list[float], 
             }
         hit["found_by"] = [name for name, found in (("vector", chunk_id in by_vector), ("keyword", chunk_id in by_keyword)) if found]
         hit["exact_match"] = bool(wanted & set(bm25.tokenize(hit["text"])))
-        hit["rrf"] = round(rrf, 3)
+        hit["rrf"] = round(rrf, 5)
         hits.append(hit)
+    
+    return hits
+

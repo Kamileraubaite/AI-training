@@ -49,7 +49,7 @@ class BM25Index:
 
             if tf:
                 total += self.idf(term) * tf * (k1 + 1) / (tf + k1 * length_norm)
-            return total
+        return total
     
     def search(self, query: str, k: int = 10) -> list[dict]:
         terms = tokenize(query)
