@@ -73,7 +73,7 @@ def build(strategy: str, force: bool = False) -> dict:
     return {"strategy": strategy,"chunks": len(chunks),"embedding_tokens": tokens,"rebuilt": True}
 
  # Search a strategy's index using question vectors already created.
-def search_with_vectors(strategy: str,query_vectors: list[list[float]],k: int) -> list[list[dict]]:
+def search_with_vector(strategy: str,query_vectors: list[list[float]],k: int) -> list[list[dict]]:
     col = collection_for(strategy)
     if col.count() == 0:
         raise RuntimeError(f"Index for '{strategy}' is empty. Please build it first.")

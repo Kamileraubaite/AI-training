@@ -27,7 +27,7 @@ def is_usable(hit, floor):
     return hit["score"] >= floor or hit.get("exact_match", False)
 
 def search_with_vector(strategy: str, question: str, query_vector: list[float], top_k: int = 3, pool: int = POOL) -> list[dict]:
-    vector_hits = chunk_index.search_with_vectors(strategy, [query_vector], k=pool)[0]
+    vector_hits = chunk_index.search_with_vector(strategy, [query_vector], k=pool)[0]
     keyword_hits = keyword_index(strategy).search(question, k=pool)
 
     fused = fusion.reciprocal_rank_fusion([

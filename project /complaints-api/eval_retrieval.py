@@ -60,7 +60,7 @@ def main() -> None:
 
     results = {}
     for strategy in chunking.STRATEGIES:
-        ranked = chunk_index.search_with_vectors(strategy, vectors, k=max(K_VALUES))
+        ranked = chunk_index.search_with_vector(strategy, vectors, k=max(K_VALUES))
         results[strategy] = score_strategy(EVAL_SET, ranked)
 
     header = f"{'strategy':<22}{'R@1':>6}{'R@3':>6}{'R@5':>6}{'MRR':>7}{'ctx words':>11}{'top ans':>9}{'top unans':>11}"
