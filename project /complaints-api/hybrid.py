@@ -36,7 +36,7 @@ def search_with_vector(strategy: str, question: str, query_vector: list[float], 
     ])[:top_k]
 
     by_vector = {hit["chunk_id"]: hit for hit in vector_hits}
-    by_keyword = {hit["chunk"]["id"]: ["chunk"] for hit in keyword_hits}
+    by_keyword = {hit["chunk"]["id"]: hit["chunk"] for hit in keyword_hits}
 
     keyword_only = [chunk_id for chunk_id in by_keyword if chunk_id not in by_vector]
     extra_cosine = chunk_index.cosine_for(strategy, query_vector, keyword_only)
