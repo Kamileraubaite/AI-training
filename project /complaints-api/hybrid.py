@@ -24,7 +24,7 @@ def identifiers(text):
     # this is our gate, in one line
         # pass if cosine reach the floor OR the chunk shares a number with the question
 def is_usable(hit, floor):
-    return hit["score"] >= floor or hit.get("exact_match", False)
+    return hit["score"] >= floor
 
 def search_with_vector(strategy: str, question: str, query_vector: list[float], top_k: int = 3, pool: int = POOL) -> list[dict]:
     vector_hits = chunk_index.search_with_vector(strategy, [query_vector], k=pool)[0]
