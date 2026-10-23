@@ -7,7 +7,8 @@ import chunking
 import knowledge 
 from documents import DOCUMENTS
 
-ALL_DOCS = DOCUMENTS
+
+ALL_DOCS = DOCUMENTS 
 
 BATCH_SIZE = 128
 

@@ -53,3 +53,4 @@ def index_definition(name: str) -> SearchIndex:
 
     )])
     return SearchIndex(name=name, fields=fields, vector_search=vector_search, semantic_search=semantic_search)
+
