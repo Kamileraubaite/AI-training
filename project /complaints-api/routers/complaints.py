@@ -83,6 +83,36 @@ def list_complaints(
         ]
     return results
 
+# Count complaints by theme using the selected filters.
+@router.get("/theme-counts")
+def theme_counts(
+    status: str | None = None,
+    product_id: str | None = None,
+    severity: str | None = None,
+    vulnerability_flag: bool | None = None,
+    date_from: date | None = None,
+    date_to: date | None = None,
+) -> dict:
+    complaints = list_complaints(
+        status=status,
+        product_id=product_id,
+        severity=severity,
+        vulnerability_flag=vulnerability_flag,
+        date_from=date_from,
+        date_to=date_to,
+    )
+
+    counts = {}
+
+    for complaint in complaints:
+        theme = complaint["theme"]
+        counts[theme] = counts.get(theme, 0) + 1
+
+    return {
+        "total": len(complaints),
+        "themes": counts,
+    }
+
 # Return the complaint identified in the URL.
 @router.get("/{complaint_id}")
 def get_complaint(
@@ -177,3 +207,5 @@ def update_complaint(new: ComplaintUpdate,
     changes = new.model_dump(mode="json")
     complaint.update(changes)
     return complaint
+
+
