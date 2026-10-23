@@ -303,6 +303,26 @@ with triage_tab:
             ["All", "low", "medium", "high", "unassessed"],
         )
 
+        product_filter = st.selectbox(
+            "Product",
+            ["All", "PRD-001", "PRD-002", "PRD-003", "PRD-004"],
+        )
+
+        vulnerability_filter = st.selectbox(
+            "Vulnerability",
+            ["All", "Yes", "No"],
+        )
+
+        date_from = st.date_input(
+            "Received from",
+            value=None,
+        )
+        
+        date_to = st.date_input(
+            "Received to",
+            value=None,
+        )
+
         triage_submitted = st.form_submit_button("Show complaints")
 
         # Request complaints matching the selected filters.
@@ -314,6 +334,18 @@ with triage_tab:
 
         if severity_filter != "All":
             params["severity"] = severity_filter
+        
+        if product_filter != "All":
+            params["product_id"] = product_filter
+
+        if vulnerability_filter != "All":
+            params["vulnerability_flag"] = vulnerability_filter == "Yes"
+
+        if date_from is not None:
+            params["date_from"] = date_from.isoformat()
+            
+        if date_to is not None:
+            params["date_to"] = date_to.isoformat()
 
         try:
             with st.spinner("Loading complaints..."):
@@ -327,6 +359,7 @@ with triage_tab:
 
             if not isinstance(complaints, list):
                 raise ValueError("Expected a list of complaints.")
+            st.session_state["triage_complaints"] = complaints
 
             if not complaints:
                 st.info("No complaints match these filters.")
@@ -348,6 +381,26 @@ with triage_tab:
                     hide_index=True,
                 )
 
+                response = httpx.get(
+                    f"{API_URL}/complaints/theme-counts",
+                    params=params,
+                    timeout=10.0,
+                )
+                response.raise_for_status()
+                
+                theme_data = response.json()
+                
+                st.subheader("Complaint themes")
+                st.write("Theme breakdown for the selected filters")
+                
+                st.dataframe(
+                    [
+                        {"Theme": theme, "Count": count}
+                        for theme, count in theme_data["themes"].items()
+                    ],
+                    hide_index=True,
+                    )
+
         except httpx.HTTPStatusError as exc:
             show_http_error(exc.response.status_code)
 
@@ -362,3 +415,43 @@ with triage_tab:
 
         except (ValueError, KeyError, TypeError):
             st.error("The complaints API returned an unexpected response.")
+        
+
+    # Let staff select a complaint from the filtered results.
+    triage_complaints = st.session_state.get("triage_complaints", [])
+
+    if triage_complaints:
+        st.subheader("Review a complaint")
+
+        selected_id = st.selectbox(
+            "Select complaint",
+            options=[c["id"] for c in triage_complaints],
+        )
+
+        if st.button("Analyse complaint"):
+            try:
+                with st.spinner("Analysing complaint..."):
+                    response = httpx.post(
+                        f"{API_URL}/insights/{selected_id}/analyse",
+                        timeout=120.0,
+                    )
+                    response.raise_for_status()
+
+                result = response.json()
+                analysis = result["analysis"]
+
+                st.write("Theme:", analysis["theme"])
+                st.write("Severity:", analysis["severity"])
+                st.write("Recommended next step:", analysis["recommended_next_step"])
+                st.write("Rationale:", analysis["rationale"])
+                st.write("Missing information:", analysis["missing_information"])
+                st.write("Human review required:", analysis["human_review_required"])
+
+            except httpx.HTTPStatusError as exc:
+                show_http_error(exc.response.status_code)
+
+            except httpx.RequestError:
+                st.error("Could not complete the complaint analysis.")
+
+            except (ValueError, KeyError, TypeError):
+                st.error("The API returned an unexpected analysis response.")
