@@ -13,7 +13,7 @@ import hybrid
 import settings
 
 # Minimum similarity required for a document to support an answer.
-RELEVANCE_FLOOR = float(os.environ.get("RELEVANCE_FLOOR", "0.45"))
+RELEVANCE_FLOOR = float(os.environ.get("RELEVANCE_FLOOR", "0.40"))
 
 import knowledge_store as knowledge
 
