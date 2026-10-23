@@ -3,7 +3,7 @@ Azure settings read from the environment.
 """
 import os
 
-AZURE_SEARCH_ENDPOINT = os.environ.get("AZURE_SEARCH_DOCUMENT", "")
+AZURE_SEARCH_ENDPOINT = os.environ.get("AZURE_SEARCH_ENDPOINT", "")
 
 AZURE_SEARCH_INDEX = os.environ.get("AZURE_SEARCH_INDEX", "complaints-chunks-v1")
 
