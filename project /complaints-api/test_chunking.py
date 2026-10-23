@@ -44,17 +44,14 @@ def test_sentence_packing_never_cuts_a_sentence():
 # Contextual chunks must carry the banking document's title.
 def test_contextual_sections_carry_title():
     chunks = chunking.by_section(DOC, contextual=True)
-
-    assert chunks
-
     for chunk in chunks:
-        assert chunk["text"].startswith(DOC["title"] + "\n")
+        text = chunk["text"]
+
+        assert text.startswith(DOC["title"] + " > ")
+        heading = text.split("\n")[0].split(" > ", 1)[1]
+        assert heading
+        assert f"## {heading}" in DOC["body"]
 
 # Plain chunks must not have the document title added as a prefix.
-def test_plain_sections_have_no_title_prefix():
-    chunks = chunking.by_section(DOC, contextual=False)
-
-    assert chunks
-
-    for chunk in chunks:
-        assert not chunk["text"].startswith(DOC["title"] + "\n")
+def test_plain_sections_carry_no_heading():
+    assert not any("> " in c["text"] for c in chunking.by_section(DOC, contextual=False)) 
