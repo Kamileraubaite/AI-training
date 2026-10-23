@@ -19,7 +19,7 @@ from grounding import is_refusal
 
 def run(strategy: str, vectors: list[list[float]], floor: float) -> dict:
     # top 3 chunks for every question 
-    ranked = chunk_index.search_with_vectors(strategy, vectors, k=3)
+    ranked = chunk_index.search_with_vector(strategy, vectors, k=3)
     # place to store results
     correct, false_refusals, wrong, tokens = [], [], [], []
     for q, hits in zip(EVAL_SET, ranked):
@@ -52,7 +52,7 @@ def run(strategy: str, vectors: list[list[float]], floor: float) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("strategies", nargs="+")
-    parser.add_argument("--floor", type=float, default=0.45)
+    parser.add_argument("--floor", type=float, default=0.40)
     args = parser.parse_args()
 
     for strategy in args.strategies:

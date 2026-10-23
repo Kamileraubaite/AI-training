@@ -1,0 +1,19 @@
+{
+  "floor": 0.4,
+  "sections_plain": {
+    "answerable_accuracy": 1,
+    "refusal_accuracy": 1,
+    "false_refusals": [],
+    "wrong_or_unrefused": [],
+    "model_calls": 30,
+    "avg_input_tokens": 285
+  },
+  "sections_contextual": {
+    "answerable_accuracy": 1,
+    "refusal_accuracy": 1,
+    "false_refusals": [],
+    "wrong_or_unrefused": [],
+    "model_calls": 30,
+    "avg_input_tokens": 326
+  }
+}

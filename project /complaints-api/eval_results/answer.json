@@ -1,13 +1,27 @@
 {
-  "floor": 0.4,
-  "sections_contextual": {
-    "answerable_accuracy": 0.966,
+  "floor": 0.5,
+  "sections_plain": {
+    "answerable_accuracy": 0.897,
     "refusal_accuracy": 1,
     "false_refusals": [
-      "q06"
+      "q22",
+      "q28"
+    ],
+    "wrong_or_unrefused": [
+      "q09"
+    ],
+    "model_calls": 28,
+    "avg_input_tokens": 231
+  },
+  "sections_contextual": {
+    "answerable_accuracy": 0.931,
+    "refusal_accuracy": 1,
+    "false_refusals": [
+      "q06",
+      "q28"
     ],
     "wrong_or_unrefused": [],
-    "model_calls": 29,
-    "avg_input_tokens": 473
+    "model_calls": 27,
+    "avg_input_tokens": 286
   }
 }
