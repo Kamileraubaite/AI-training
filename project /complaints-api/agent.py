@@ -16,11 +16,6 @@ AGENT_SYSTEM_PROMPT = (
     "tool returns nothing relevant or the provided evidence is insufficient, say so."
     "Do not invent compensation amounts or assume past complaint outcomes apply to a new case."
     "Your overall guidance is for staff review, not to provide a final decision." 
-    " Any recommendation to reverse a fee, provide redress or settle a "
-    "complaint needs approval from an authorised member of staff. "
-    "Use past cases as examples, and make clear that the current "
-    "complaint needs its own evidence and review. "
-
 )
 
 # Describe the document search tool and the input it requires
